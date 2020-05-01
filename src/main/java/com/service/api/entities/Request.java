@@ -1,6 +1,9 @@
-package com.service.api.request;
+package com.service.api.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,17 +19,32 @@ import java.util.Map;
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
 
-//TODO desirializer??
 public class Request {
-    
-    private final static String URL = "http://router.project-osrm.org/route/v1/driving/";
-    
-    private Map<String, String> origin;
-    private Map<String, String> destination;
+
+
+   
+    @JsonProperty("time")
     private float time;
     
+    @JsonProperty("x-secret")
+    private String xSecret;
+    
+    @JsonProperty("origin")
+    @JsonDeserialize 
+    private Map<String, String> origin;
+    
+    @JsonProperty("destination")
+    @JsonDeserialize 
+    private Map<String, String> destination;
+ 
+    @JsonProperty("waypoints")
+    @JsonDeserialize 
     private Map<String, String>[] waypoints;
-
+    
+//      @JsonCreator
+//    public Request(){
+//        
+//    }
     @Override
     public String toString() {
         return "Request{" + "origin=" + origin + ", destination=" + destination + ", time=" + time + ", waypoints=" + waypoints + '}';
@@ -39,17 +57,19 @@ public class Request {
     
     /**
      * Name-to-url map for requests.
+     * @param url url with port
      * @return
      */
-    public Map<String, String> getOSMRequestUrls(){
+    public Map<String, String> getOSMRequestUrls(String url){
                
         Map<String, String> urls = new HashMap<>();
         
         for (Map<String, String> point : this.waypoints){
-           StringBuilder sb = new StringBuilder(URL);
+           StringBuilder sb = new StringBuilder(url);
            sb.append(pointToString(origin)).append(";");
            sb.append(pointToString(point)).append(";");
            sb.append(pointToString(this.destination)).append("?");
+           //TODO pass as args
            sb.append("geometries=geojson&overview=false&steps=true");
            urls.put(point.get("name"), sb.toString());
         }
