@@ -56,7 +56,7 @@ public class TestCarMovement {
             if(car.getRouteName().equals(bestRoute)){
                 continue;
             }
-            double delay = car.moveToDist(bestDist);
+            double delay = car.computeDelay(bestDist);
             System.out.println("route: "+car.getRouteName() + " , delay: "+delay);
         }
 	}

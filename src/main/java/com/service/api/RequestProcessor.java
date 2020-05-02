@@ -5,8 +5,8 @@
  */
 package com.service.api;
 
-import com.service.api.controllers.routing.FIlERouteProvider;
-import com.service.api.controllers.routing.RouteProvider;
+import com.service.api.routing.FIlERouteProvider;
+import com.service.api.routing.RouteProvider;
 import com.service.api.distance.DistanceProvider;
 import com.service.api.distance.Proj4jDistanceProvider;
 import com.service.api.entities.Car;
@@ -23,8 +23,13 @@ import java.util.logging.Logger;
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
 public class RequestProcessor {
-        private final DistanceProvider dp = new Proj4jDistanceProvider();
-        private final RouteProvider rp = new FIlERouteProvider("");
+        private final DistanceProvider dp;
+        private final RouteProvider rp ;
+    
+    public RequestProcessor(DistanceProvider dp, RouteProvider rp){
+        this.dp = (dp == null) ? new Proj4jDistanceProvider() : dp;
+        this.rp = (rp == null) ?  new FIlERouteProvider("") : rp;
+    }
     
     
     public Response processRequest(Request request){
@@ -49,7 +54,7 @@ public class RequestProcessor {
         // compute delays, save to response
         Response response = new Response();
         for(Car car: cars){
-            double delay = car.getRouteName().equals(bestRoute) ? 0 : car.moveToDist(bestDist);
+            double delay = car.getRouteName().equals(bestRoute) ? 0 : car.computeDelay(bestDist);
             response.addDelay(car.getRouteName(), delay);
         }
         return response;

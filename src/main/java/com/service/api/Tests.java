@@ -15,6 +15,8 @@ import com.service.api.entities.Response;
 import com.service.api.entities.Route;
 import static com.service.api.json.TestJson.createTestRequest;
 import static com.service.api.json.TestJson.readRoutesFile;
+import com.service.api.routing.OSMRouteProvider;
+import com.service.api.routing.RouteProvider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
-public class FileTest {
+public class Tests {
     
     public static void test1(Request request, double time){
          System.out.println("Test1:");
@@ -51,7 +53,7 @@ public class FileTest {
                 response.addDelay(car.getRouteName(), 0);
                 continue;
             }
-            double delay = car.moveToDist(bestDist);
+            double delay = car.computeDelay(bestDist);
             response.addDelay(car.getRouteName(), delay);
             System.out.println("route: "+car.getRouteName() + " , delay: "+delay);
         }
@@ -62,29 +64,46 @@ public class FileTest {
             String jsonString = mapper.writeValueAsString(response);
             System.out.println("JsonResponse \n"+jsonString);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(FileTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tests.class.getName()).log(Level.SEVERE, null, ex);
         }
  
     }
     
     public static void test2(Request request){
         System.out.println("Test2:");
-        RequestProcessor rp = new RequestProcessor();
-        Response response = rp.processRequest(request);
+        RequestProcessor processor = new RequestProcessor(null, null);
+        Response response = processor.processRequest(request);
         ObjectMapper mapper = new ObjectMapper();
         try {
             //Object to JSON in String
             String jsonString = mapper.writeValueAsString(response);
             System.out.println("JsonResponse \n"+jsonString);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(FileTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tests.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public static void testOsmr(Request request){
+          System.out.println("TestOsm:");
+        DistanceProvider dp = new Proj4jDistanceProvider();
+        RouteProvider rp = new OSMRouteProvider("");
+        
+        RequestProcessor processor = new RequestProcessor(dp, rp);
+        
+        Response response = processor.processRequest(request);
+         try {
+            //Object to JSON in String
+            String jsonString = new ObjectMapper().writeValueAsString(response);
+            System.out.println("JsonResponse \n"+jsonString);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(Tests.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
     
     public static void main(String[] args) {
-        
-        
+                
         DistanceProvider dp = new Proj4jDistanceProvider();
         Request request = createTestRequest();
         if(request == null){
@@ -93,7 +112,7 @@ public class FileTest {
         double time = 180;
         test1(request, time);
         test2(request);
-        
+        testOsmr(request);
        
         
 	}

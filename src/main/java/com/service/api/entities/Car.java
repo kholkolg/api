@@ -110,15 +110,9 @@ public class Car {
         return endPoint;
     }
     
-    private double[] findPointByDistance(Step step, double routeTime, double distance){
-        double[][] waypoints = step.getWaypoints();
-        double[] endPoint = waypoints[1];
-        return endPoint;
-    }
     
-    public double moveToDist(double targetDistance){
+    public double computeDelay(double targetDistance){
        
-        double distFromHere = dp.getDistanceMeters(currentPosition, destination);
         double time = 0;
         boolean stop = false;
        
@@ -152,7 +146,6 @@ public class Car {
         }else{
             point2 = steps.get(currentStepIndex+1).getWaypoints()[0];
         }
-       
         double dist = dp.getDistanceFromPoint1(point1, point2, destination, targetDistance);
         time = dist/ steps.get(currentStepIndex).getSpeedMs();      
         return time;
