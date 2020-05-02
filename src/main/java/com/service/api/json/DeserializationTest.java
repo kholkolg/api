@@ -21,11 +21,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import org.springframework.boot.SpringApplication;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia 
  */
 public class DeserializationTest {
         
@@ -35,7 +34,7 @@ public class DeserializationTest {
      * @param filename
      * @return
      */
-    public static String createTestRequest(String filename){
+    public static String readRequesFile(String filename){
         
         StringBuilder sb = new StringBuilder("{\"x-secret\":\"Mileus\",");
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -49,6 +48,22 @@ public class DeserializationTest {
         sb.append("}");
         return sb.toString();
     }
+    
+     public static Request createTestRequest(){
+          // Read request from json       
+        String inputFile = DIR + "request.json";
+        String requestStr = readRequesFile(inputFile);
+        Request request = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            request = mapper.readValue(requestStr,  Request.class);
+           
+        } catch (IOException ex) {
+            Logger.getLogger(ApiApplication.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return request;
+     }
+    
     
     public static List<Route> readRoutesFile(Request request){
         
@@ -64,8 +79,8 @@ public class DeserializationTest {
                 String result = sb.toString();
                 JsonNode resultObj =  mapper.readTree(result);
                 JsonNode routeObj = resultObj.get("routes").get(0);
-//                String routeStr = routeObj.asText();
                 route = mapper.convertValue(routeObj, Route.class);
+                route.setName(e.getKey());
                 System.out.println("New route: " +route);
                 routes.add(route);
             }catch (IOException ex) {
@@ -79,23 +94,13 @@ public class DeserializationTest {
       public static void main(String[] args) throws IOException, URISyntaxException {
 		
         // Read request from json       
-        String inputFile = DIR + "request.json";
-        String requestStr = createTestRequest(inputFile);
-        Request request = null;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            request = mapper.readValue(requestStr,  Request.class);
-           
-        } catch (IOException ex) {
-            Logger.getLogger(ApiApplication.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        OSMR osmr = new OSMR();
+        Request request = createTestRequest();
         System.out.println("Request:\n" +request);
-        
 //      List<Route> routes = osmr.getRoutes(request);
-         List<Route> routes = readRoutesFile(request);
-        for(Route r : routes) System.out.println(r);
+        if(request != null){
+            List<Route> routes = readRoutesFile(request);
+           for(Route r : routes) System.out.println(r);
+        }
            
         
 	}
