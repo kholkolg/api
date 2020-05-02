@@ -76,11 +76,13 @@ public class OSMR {
     
 
     private Route getRoute(String name, String url) throws URISyntaxException, IOException{
-        
+         ObjectMapper mapper = new ObjectMapper();
         JsonNode result = getOSMResponse(url);
+        JsonNode routeObj = result.get("routes").get(0);
         Route route = null; 
+        System.out.println(result);
         try {
-            route = new ObjectMapper().readValue(url, Route.class);
+            route = mapper.readValue(routeObj.asText(), Route.class);
             route.setName(name);
         } catch (JsonProcessingException ex) {
             Logger.getLogger(OSMR.class.getName()).log(Level.SEVERE, null, ex);

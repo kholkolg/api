@@ -41,10 +41,7 @@ public class Request {
     @JsonDeserialize 
     private Map<String, String>[] waypoints;
     
-//      @JsonCreator
-//    public Request(){
-//        
-//    }
+
     @Override
     public String toString() {
         return "Request{" + "origin=" + origin + ", destination=" + destination + ", time=" + time + ", waypoints=" + waypoints + '}';
