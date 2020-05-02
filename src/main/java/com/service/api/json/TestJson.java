@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  *
  * @author Olga Kholkovskaia 
  */
-public class DeserializationTest {
+public class TestJson {
         
     static String DIR = "/home/olga/NetBeansProjects/api/data/";
 /**
@@ -83,7 +83,7 @@ public class DeserializationTest {
                 System.out.println("New route: " +route);
                 routes.add(route);
             }catch (IOException ex) {
-                Logger.getLogger(DeserializationTest.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TestJson.class.getName()).log(Level.SEVERE, null, ex);
             }             
         }
         return routes;   

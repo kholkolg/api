@@ -7,8 +7,8 @@ package com.service.api.entities;
 
 import com.service.api.distance.DistanceProvider;
 import com.service.api.distance.Proj4jDistanceProvider;
-import static com.service.api.json.DeserializationTest.createTestRequest;
-import static com.service.api.json.DeserializationTest.readRoutesFile;
+import static com.service.api.json.TestJson.createTestRequest;
+import static com.service.api.json.TestJson.readRoutesFile;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

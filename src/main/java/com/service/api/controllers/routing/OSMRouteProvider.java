@@ -90,8 +90,12 @@ public class OSMRouteProvider implements RouteProvider {
     private Route getRoute(String name, String url){
         ObjectMapper mapper = new ObjectMapper();
         JsonNode result = getOSMResponse(url);
+        String code = result.get("code").asText().toLowerCase();
+        if(!code.equals("ok")){
+            Logger.getLogger(OSMRouteProvider.class.getName()).log(Level.SEVERE, "osm error {0}", code);
+            return null;
+        }
         JsonNode routeObj = result.get("routes").get(0);
-      //  System.out.println(result);
         Route route = mapper.convertValue(routeObj, Route.class);
         route.setName(name);
  
