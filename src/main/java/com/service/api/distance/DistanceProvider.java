@@ -16,4 +16,6 @@ public interface DistanceProvider {
     
     public double getDistanceMeters(double[] origin, double[] destination);
     
+    public double[] getPoint(double[] origin, double[] destination, double distFromOrigin);
+    
 }

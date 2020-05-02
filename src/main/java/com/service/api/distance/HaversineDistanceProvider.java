@@ -35,6 +35,11 @@ public class HaversineDistanceProvider implements DistanceProvider{
     private  double toRad(double value) {
         return value * Math.PI / 180;
 }
+
+    @Override
+    public double[] getPoint(double[] origin, double[] destination, double distFromOrigin) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
     
     

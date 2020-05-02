@@ -1,4 +1,4 @@
-/*
+A/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -9,6 +9,7 @@ package com.service.api.entities;
 import com.service.api.json.RouteDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.List;
+import org.springframework.context.annotation.Bean;
 
 
 /**
@@ -27,7 +28,7 @@ public class Route {
     
     private final List<Step> steps;
         
-   
+
     public Route(double duration, double distance, List<Step> steps) {
         
         this.distance = distance;

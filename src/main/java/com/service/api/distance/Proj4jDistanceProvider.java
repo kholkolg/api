@@ -18,35 +18,58 @@ import org.springframework.stereotype.Service;
 //@Service("Proj4jDistanceProvider")
 public class Proj4jDistanceProvider implements DistanceProvider{
     
-    private final BasicCoordinateTransform transform;
+    private final BasicCoordinateTransform transformToMetric;
+    
+    private final BasicCoordinateTransform transformFromMetric;
     
     public Proj4jDistanceProvider(){
         
         CRSFactory factory = new CRSFactory();
         CoordinateReferenceSystem srcCrs = factory.createFromName("EPSG:4326");
         CoordinateReferenceSystem dstCrs = factory.createFromName("EPSG:3310");
-        transform = new BasicCoordinateTransform(srcCrs, dstCrs);
+        transformToMetric = new BasicCoordinateTransform(srcCrs, dstCrs);
+        transformFromMetric = new BasicCoordinateTransform(dstCrs, srcCrs);
 }
     
     @Override
     public double getDistanceMeters(double[] origin, double[] destination) {
   
-        ProjCoordinate originCoord = new ProjCoordinate(origin[0], origin[1]);
-        ProjCoordinate destCoord = new ProjCoordinate(destination[0], destination[1]);
-        ProjCoordinate origingProjected = new ProjCoordinate();
-        ProjCoordinate destProjected = new ProjCoordinate();
-        
-        transform.transform(originCoord, origingProjected);
-        transform.transform(destCoord, destProjected);
-        
-        double dist = getDistance(origingProjected, destProjected);
+        double[] originProjected = projectPoint(origin, true);
+        double[] destProjected = projectPoint(destination, true);
+      
+        double dist = getDistance(originProjected, destProjected);
         return dist;   
     }
-
-   
-    private double getDistance(ProjCoordinate origin, ProjCoordinate dest){
-        return Math.sqrt(Math.pow(dest.x - origin.x, 2) + Math.pow(dest.y - origin.y, 2));
+    
+    @Override
+    public double[] getPoint(double[] origin, double[] destination, double distFromOrigin) {
+        
+        double[] originProjected = projectPoint(origin, true);
+        double[] destProjected = projectPoint(destination, true);
+        
+        double dist = getDistance(originProjected, destProjected);
+        double alpha = distFromOrigin/dist;
+        double dX = destProjected[0] - originProjected[0];
+        double dY = destProjected[1] - originProjected[1];
+        double[] pointProjected = new double[]{originProjected[0] + alpha*dX, originProjected[1] + alpha * dY};
+        double[] point = projectPoint(pointProjected, false);
+        return point;
+    }
+        
+    private double[] projectPoint(double[] point, boolean toMetric){
+        ProjCoordinate srcCoord = new ProjCoordinate(point[0], point[1]);
+        ProjCoordinate destCoord = new ProjCoordinate();
+        if(toMetric){
+            transformToMetric.transform(srcCoord, destCoord);
+        }else{
+            transformFromMetric.transform(srcCoord, destCoord);
+        }
+        return new double[]{destCoord.x, destCoord.y};
     }
     
-    
+   
+    private double getDistance(double[] origin, double[] dest){
+        return Math.sqrt(Math.pow(dest[0] - origin[0], 2) + Math.pow(dest[1] - origin[1], 2));
+    }
+   
 }

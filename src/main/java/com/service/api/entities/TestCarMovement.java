@@ -8,6 +8,7 @@ package com.service.api.entities;
 import com.service.api.ApiApplication;
 import com.service.api.distance.DistanceProvider;
 import com.service.api.distance.HaversineDistanceProvider;
+import com.service.api.distance.Proj4jDistanceProvider;
 import static com.service.api.json.DeserializationTest.createTestRequest;
 import static com.service.api.json.DeserializationTest.readRoutesFile;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class TestCarMovement {
        
 	public static void main(String[] args) {
         
-        DistanceProvider dp = new HaversineDistanceProvider();
+        DistanceProvider dp = new Proj4jDistanceProvider();
         Request request = createTestRequest();
         System.out.println("Request:\n" +request);
         if(request == null){
