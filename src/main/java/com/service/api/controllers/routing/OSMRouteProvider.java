@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.service.api;
+package com.service.api.controllers.routing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,10 +35,20 @@ import org.apache.http.impl.client.HttpClients;
  *
  * @author Olga Kholkovskaia 
  */
-public class OSMR {
-    private final static String URL = "http://router.project-osrm.org/route/v1/driving/";
+public class OSMRouteProvider implements RouteProvider {
+    private final  String url;
+    
+    private final String osmParams = "geometries=geojson&overview=false&steps=true";
     private final HttpClient httpClient = HttpClients.createDefault();
 
+    public OSMRouteProvider(String url){
+        if(url.equals("")){
+            this.url =  "http://router.project-osrm.org/route/v1/driving/";
+        }else{
+            this.url = url;
+        }
+        
+    }
    
     /**
      * Request to routes.
@@ -46,9 +56,10 @@ public class OSMR {
      * @param request .
      * @return
      */
-    public List<Route> getRoutes(Request request) throws URISyntaxException, IOException{
+    @Override
+    public List<Route> getRoutes(Request request){
         List<Route> routes = new ArrayList<>();
-        Map<String, String> urlsMap = request.getOSMRequestUrls(URL);
+         Map<String, String> urlsMap = request.getOSMRequestUrls(url, osmParams);
         for(Map.Entry<String,String> e : urlsMap.entrySet()){
             Route route = getRoute(e.getKey(), e.getValue());
             routes.add(route);
@@ -57,9 +68,10 @@ public class OSMR {
     }
   
     
-    private JsonNode getOSMResponse(String url) throws URISyntaxException, IOException {
+    private JsonNode getOSMResponse(String url)  {
         ObjectMapper mapper = new ObjectMapper();
 		JsonNode result = null;
+        //TODO timeout
 		try {
 			URIBuilder builder = new URIBuilder(url);
 			URI uri = builder.build();
@@ -68,26 +80,21 @@ public class OSMR {
 			HttpResponse response = httpClient.execute(request);
 			result = mapper.readTree(response.getEntity().getContent());
            
-        } catch (NumberFormatException | UnsupportedOperationException ex){
-			 Logger.getLogger(OSMR.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NumberFormatException | UnsupportedOperationException | URISyntaxException | IOException ex){
+			 Logger.getLogger(OSMRouteProvider.class.getName()).log(Level.SEVERE, null, ex);
 		}
         return result;
     }
     
 
-    private Route getRoute(String name, String url) throws URISyntaxException, IOException{
-         ObjectMapper mapper = new ObjectMapper();
+    private Route getRoute(String name, String url){
+        ObjectMapper mapper = new ObjectMapper();
         JsonNode result = getOSMResponse(url);
         JsonNode routeObj = result.get("routes").get(0);
-        Route route = null; 
-        System.out.println(result);
-        try {
-            route = mapper.readValue(routeObj.asText(), Route.class);
-            route.setName(name);
-        } catch (JsonProcessingException ex) {
-            Logger.getLogger(OSMR.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+      //  System.out.println(result);
+        Route route = mapper.convertValue(routeObj, Route.class);
+        route.setName(name);
+ 
         return route;        
     }
    

@@ -40,6 +40,6 @@ public interface DistanceProvider {
      * @param distToDestination
      * @return 
      */
-     public double getPoint(double[] point1, double[] point2, double[] destination, double distToDestination);
+     public double getDistanceFromPoint1(double[] point1, double[] point2, double[] destination, double distToDestination);
     
 }

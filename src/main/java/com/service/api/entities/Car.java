@@ -116,7 +116,6 @@ public class Car {
         return endPoint;
     }
     
-    // TODO compute final result
     public double moveToDist(double targetDistance){
        
         double distFromHere = dp.getDistanceMeters(currentPosition, destination);
@@ -154,23 +153,11 @@ public class Car {
             point2 = steps.get(currentStepIndex+1).getWaypoints()[0];
         }
        
-        double dist = dp.getPoint(point1, point2, destination, targetDistance);
+        double dist = dp.getDistanceFromPoint1(point1, point2, destination, targetDistance);
         time = dist/ steps.get(currentStepIndex).getSpeedMs();      
         return time;
     }
-    
-    private List<double[]> getWaypoints(){
-        
-        List<double[]> waypoints = new LinkedList<>();
-        for(int i = currentStepIndex; i < steps.size(); i++){
-            Step step = steps.get(i);
-            double[][] wps = step.getWaypoints();
-            for(int j = currentWpIndex; j < wps.length; j++ ){
-                waypoints.add(wps[j]);
-            }
-        }
-        return waypoints;     
-    } 
+
     
     private void reset(){
         currentStepIndex = 0;

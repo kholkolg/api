@@ -53,13 +53,4 @@ public class Step {
         return distance/duration;
     }
      
-//    public double[] computeCoordinate(double travelTime){
-//        double r = travelTime / this.duration;
-//        double[] endPoint = getEndPoint();
-//        double[] startPoint = getStartPoint();
-//        double dX = endPoint[0] - startPoint[0];
-//        double dY = endPoint[1] - startPoint[1];
-//        double[] newPoint = {startPoint[0] + dX*r, startPoint[1] + dY*r};
-//        return newPoint;
-//    }
 }

@@ -8,7 +8,6 @@ package com.service.api.json;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.api.ApiApplication;
-import com.service.api.OSMR;
 import com.service.api.entities.Request;
 import com.service.api.entities.Route;
 import java.io.BufferedReader;
@@ -67,11 +66,11 @@ public class DeserializationTest {
     
     public static List<Route> readRoutesFile(Request request){
         
-        String[] files = {"Point A", "Point B", "Point C"};  
         ObjectMapper mapper = new ObjectMapper();
         List<Route> routes = new ArrayList<>();
         Route route = null; 
-        Map<String, String> urlsMap = request.getOSMRequestUrls("http://router.project-osrm.org/route/v1/driving/");
+        Map<String, String> urlsMap = request.getOSMRequestUrls("http://router.project-osrm.org/route/v1/driving/", 
+            "");
         for(Map.Entry<String,String> e : urlsMap.entrySet()){
             StringBuilder sb = new StringBuilder();
             try(BufferedReader br = new BufferedReader(new FileReader(String.format("%s%s.json", DIR, e.getKey())))){
@@ -84,7 +83,7 @@ public class DeserializationTest {
                 System.out.println("New route: " +route);
                 routes.add(route);
             }catch (IOException ex) {
-                Logger.getLogger(OSMR.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DeserializationTest.class.getName()).log(Level.SEVERE, null, ex);
             }             
         }
         return routes;   

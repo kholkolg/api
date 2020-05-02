@@ -19,8 +19,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
  */
 
 public class TestCarMovement {
-//       @Autowired
-//       @Qualifier("haversineDistanceProvider")
  
        
 	public static void main(String[] args) {

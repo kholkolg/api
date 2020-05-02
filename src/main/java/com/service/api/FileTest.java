@@ -26,16 +26,10 @@ import java.util.logging.Logger;
  */
 public class FileTest {
     
-    
-    public static void main(String[] args) {
-        
-        double time = 180;
+    public static void test1(Request request, double time){
+         System.out.println("Test1:");
         DistanceProvider dp = new Proj4jDistanceProvider();
-        Request request = createTestRequest();
-        if(request == null){
-            System.exit(-1);
-        }
-        List<Route> routes = readRoutesFile(request);
+         List<Route> routes = readRoutesFile(request);
         List<Car> cars = new ArrayList<>();
         double bestDist = Double.MAX_VALUE;
         String bestRoute = "";
@@ -66,10 +60,41 @@ public class FileTest {
         try {
             //Object to JSON in String
             String jsonString = mapper.writeValueAsString(response);
-            System.out.println("JsonRequest \n"+jsonString);
+            System.out.println("JsonResponse \n"+jsonString);
         } catch (JsonProcessingException ex) {
             Logger.getLogger(FileTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+ 
+    }
+    
+    public static void test2(Request request){
+        System.out.println("Test2:");
+        RequestProcessor rp = new RequestProcessor();
+        Response response = rp.processRequest(request);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            //Object to JSON in String
+            String jsonString = mapper.writeValueAsString(response);
+            System.out.println("JsonResponse \n"+jsonString);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(FileTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public static void main(String[] args) {
+        
+        
+        DistanceProvider dp = new Proj4jDistanceProvider();
+        Request request = createTestRequest();
+        if(request == null){
+            System.exit(-1);
+        }
+        double time = 180;
+        test1(request, time);
+        test2(request);
+        
+       
         
 	}
 

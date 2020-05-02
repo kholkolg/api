@@ -73,7 +73,7 @@ public class Proj4jDistanceProvider implements DistanceProvider{
     }
 
     @Override
-    public double getPoint(double[] point1, double[] point2, double[] destination, double distToDestination) {
+    public double getDistanceFromPoint1(double[] point1, double[] point2, double[] destination, double distToDestination) {
         double[] point1Projected = projectPoint(point1, true);
         double[] point2Projected = projectPoint(point2, true);
         double[] destinationProjected = projectPoint(destination, true);
@@ -87,19 +87,9 @@ public class Proj4jDistanceProvider implements DistanceProvider{
         double b = -2*p1ToDestLen*angle;
         double c = distToDestination*distToDestination - p1ToDestLen*p1ToDestLen;
         
-        double[] solutions = solve(a,b,c);
-        //distance from point 1 to target point
-        double solution = solutions[0];
-        
-//        double p1ToP2Len = getDistance(point2Projected, point1Projected);
-//        double alpha = solution/p1ToDestLen;
-//        double dX = point2Projected[0] - point1Projected[0];
-//        double dY = point2Projected[1] - point1Projected[1];
-//        double[] newPointProjected = new double[]{point1Projected[0] + alpha*dX, point1Projected[1] + alpha*dY};
-//        double[] newPoint = projectPoint(newPointProjected, false);
-//        
-        
-//        return newPoint;
+        // 
+        double solution = solve(a,b,c);
+
         return solution;
     }
     
@@ -115,11 +105,12 @@ public class Proj4jDistanceProvider implements DistanceProvider{
         return angle;
     }
     
-    private double[] solve(double a, double b, double c){
+    private double solve(double a, double b, double c){
         double desc = Math.sqrt(a*a - 4*b*c);
-        double x1 = (-b + desc)/(2*a);
-        double x2 = (-b -desc)/(2*a);
-        return new double[]{x1, x2};
-    }
+        double sol = (-b + desc)/(2*a);
+//        double sol2 = (-b -desc)/(2*a);
+//        double sol = sol1 >= 0 ? sol1 : sol2;
+        return sol;
+     }
    
 }

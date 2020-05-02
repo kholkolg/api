@@ -47,6 +47,10 @@ public class Request {
         return "Request{" + "origin=" + origin + ", destination=" + destination + ", time=" + time + ", waypoints=" + waypoints + '}';
     }
 
+    public float getTime() {
+        return time;
+    }
+
       
     private String pointToString(Map<String, String> point){
         return String.format("%s,%s", point.get("lon"), point.get("lat"));
@@ -54,20 +58,21 @@ public class Request {
     
     /**
      * Name-to-url map for requests.
-     * @param url url with port
+     * @param prefix   
+     * @param postfix   
      * @return
      */
-    public Map<String, String> getOSMRequestUrls(String url){
+    public Map<String, String> getOSMRequestUrls(String prefix, String postfix){
                
         Map<String, String> urls = new HashMap<>();
         
         for (Map<String, String> point : this.waypoints){
-           StringBuilder sb = new StringBuilder(url);
+           StringBuilder sb = new StringBuilder(prefix);
            sb.append(pointToString(origin)).append(";");
            sb.append(pointToString(point)).append(";");
            sb.append(pointToString(this.destination)).append("?");
            //TODO pass as args
-           sb.append("geometries=geojson&overview=false&steps=true");
+           sb.append(postfix);
            urls.put(point.get("name"), sb.toString());
         }
         return urls;

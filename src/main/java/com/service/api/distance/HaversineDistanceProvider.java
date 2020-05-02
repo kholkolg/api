@@ -42,7 +42,7 @@ public class HaversineDistanceProvider implements DistanceProvider{
     }
 
     @Override
-    public double getPoint(double[] point1, double[] point2, double[] destination, double distToDestination) {
+    public double getDistanceFromPoint1(double[] point1, double[] point2, double[] destination, double distToDestination) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
