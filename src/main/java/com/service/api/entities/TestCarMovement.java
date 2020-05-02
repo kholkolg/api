@@ -42,6 +42,7 @@ public class TestCarMovement {
         String bestRoute = "";
         for(Route r : routes){
             Car car = new Car(r, dp);
+            cars.add(car);
             double dist = car.movefromStart(time);
             System.out.println("Car " + car.getRouteName() + ", dist " + dist);
             if(dist < bestDist){
@@ -50,6 +51,15 @@ public class TestCarMovement {
             }
         }
         System.out.println("Winner :" + bestRoute + ", dist " + bestDist);
+        
+        for(Car car: cars){
+            System.out.println("Car "+car.getRouteName());
+            if(car.getRouteName().equals(bestRoute)){
+                continue;
+            }
+            double delay = car.moveToDist(bestDist);
+            System.out.println(car.getRouteName() + ", delay" + delay);
+        }
 	}
 
     

@@ -53,6 +53,10 @@ public class Route {
     public double[] getDestination(){
         return this.steps.get(this.steps.size()-1).getEndPoint();
     }
+    
+    public double[] getOrigin(){
+        return this.steps.get(0).getEndPoint();
+    }
         
     @Override
     public String toString() {

@@ -71,5 +71,55 @@ public class Proj4jDistanceProvider implements DistanceProvider{
     private double getDistance(double[] origin, double[] dest){
         return Math.sqrt(Math.pow(dest[0] - origin[0], 2) + Math.pow(dest[1] - origin[1], 2));
     }
+
+    @Override
+    public double getPoint(double[] point1, double[] point2, double[] destination, double distToDestination) {
+        double[] point1Projected = projectPoint(point1, true);
+        double[] point2Projected = projectPoint(point2, true);
+        double[] destinationProjected = projectPoint(destination, true);
+        
+        // cosine 
+        double angle = findAngle(destinationProjected, point2Projected, point1Projected);
+        double p1ToDestLen = getDistance(destinationProjected, point1Projected);
+        
+        // equation coefficients
+        double a = 1;
+        double b = -2*p1ToDestLen*angle;
+        double c = distToDestination*distToDestination - p1ToDestLen*p1ToDestLen;
+        
+        double[] solutions = solve(a,b,c);
+        //distance from point 1 to target point
+        double solution = solutions[0];
+        
+//        double p1ToP2Len = getDistance(point2Projected, point1Projected);
+//        double alpha = solution/p1ToDestLen;
+//        double dX = point2Projected[0] - point1Projected[0];
+//        double dY = point2Projected[1] - point1Projected[1];
+//        double[] newPointProjected = new double[]{point1Projected[0] + alpha*dX, point1Projected[1] + alpha*dY};
+//        double[] newPoint = projectPoint(newPointProjected, false);
+//        
+        
+//        return newPoint;
+        return solution;
+    }
+    
+    private double findAngle(double[] point1, double[] point2, double[] commonPoint){
+        
+        double[] vec1 = new double[]{point1[0] - commonPoint[0], point1[1] - commonPoint[1]};
+        double[] vec2 = new double[]{point2[0] - commonPoint[0], point2[1] - commonPoint[1]};
+        double vec1Norm = getDistance(point1, commonPoint);
+        double vec2Norm = getDistance(point2, commonPoint);
+        double crossProd = vec1[0]*vec2[0] + vec1[1]*vec2[0];
+        double angle = crossProd/(vec1Norm*vec1Norm*vec2Norm*vec2Norm);
+        
+        return angle;
+    }
+    
+    private double[] solve(double a, double b, double c){
+        double desc = Math.sqrt(a*a - 4*b*c);
+        double x1 = (-b + desc)/(2*a);
+        double x2 = (-b -desc)/(2*a);
+        return new double[]{x1, x2};
+    }
    
 }
