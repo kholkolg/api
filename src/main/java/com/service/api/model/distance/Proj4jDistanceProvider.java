@@ -5,11 +5,11 @@
  */
 package com.service.api.model.distance;
 
+import java.util.Arrays;
 import org.osgeo.proj4j.BasicCoordinateTransform;
 import org.osgeo.proj4j.CRSFactory;
 import org.osgeo.proj4j.CoordinateReferenceSystem;
 import org.osgeo.proj4j.ProjCoordinate;
-import org.springframework.stereotype.Service;
 
 /**
  *
@@ -22,6 +22,7 @@ public class Proj4jDistanceProvider implements DistanceProvider{
     
     private final BasicCoordinateTransform transformFromMetric;
     
+    //
     private final double minDist;
     
     public Proj4jDistanceProvider(){
@@ -51,6 +52,7 @@ public class Proj4jDistanceProvider implements DistanceProvider{
         double[] destProjected = projectPoint(destination, true);
         
         double dist = getDistance(originProjected, destProjected);
+        //if it too close to origin
         if(dist < minDist){
             return origin;
         }
@@ -89,12 +91,10 @@ public class Proj4jDistanceProvider implements DistanceProvider{
         double p1ToDestLen = getDistance(destinationProjected, point1Projected);
         
         // equation coefficients
-        double a = 1;
         double b = -2*p1ToDestLen*angle;
         double c = distToDestination*distToDestination - p1ToDestLen*p1ToDestLen;
-        
         // 
-        double solution = solve(a,b,c);
+        double solution = solve(b,c);
 
         return solution;
     }
@@ -111,12 +111,9 @@ public class Proj4jDistanceProvider implements DistanceProvider{
         return angle;
     }
     
-    private double solve(double a, double b, double c){
-        double desc = Math.sqrt(a*a - 4*b*c);
-        double sol = (-b + desc)/(2*a);
-//        double sol2 = (-b -desc)/(2*a);
-//        double sol = sol1 >= 0 ? sol1 : sol2;
+    private double solve(double b, double c){
+        double desc = Math.sqrt(1 - 4*b*c);
+        double sol = (-b + desc)/(2);
         return sol;
      }
-   
 }

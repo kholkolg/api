@@ -6,18 +6,18 @@
 package com.service.api.model;
 
 import com.service.api.model.distance.DistanceProvider;
-import java.util.LinkedList;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia 
  */
 
 public class Car {
-     
+        
     private DistanceProvider dp;
        
     private final String routeName;
@@ -30,9 +30,9 @@ public class Car {
     
     private double[] currentPosition;
     
-    private double[] destination;
+    private final double[] destination;
     
-    private double[] origin;
+    private final double[] origin;
     
     
     public Car(Route route, DistanceProvider dp){
@@ -59,17 +59,22 @@ public class Car {
         return routeName;
     }
     
+    /**
+     * Computes distance from destination after the given time;
+     * @param timeToTravel
+     * @return 
+     */
     
-    public double movefromStart(double duration){
+    public double movefromStart(double timeToTravel){
         
         reset();
         double routeTime = 0;
         //find the last step
-        routeTime = findStep(routeTime, duration);
+        routeTime = findStep(routeTime, timeToTravel);
         Step lastStep = steps.get(currentStepIndex);
         //find last waypoint
-        routeTime = findWaypoint(lastStep, routeTime, duration);
-        currentPosition = findPointByTime(lastStep, routeTime, duration);
+        routeTime = findWaypoint(lastStep, routeTime, timeToTravel);
+        currentPosition = findPointByTime(lastStep, routeTime, timeToTravel);
         double dist = dp.getDistanceMeters(currentPosition, destination);
         return dist;
     }
@@ -85,31 +90,15 @@ public class Car {
         }
         return routeTime;
     }
-    
-    private double findWaypoint(Step step, double routeTime, double duration){
-        double[][] waypoints = step.getWaypoints();
-        double speed = step.getSpeedMs();
-        double stepDistance = dp.getDistanceMeters(waypoints[currentWpIndex], waypoints[currentWpIndex + 1]);
-        double stepDuration = stepDistance / speed;
-        while((routeTime + stepDuration) < duration && currentWpIndex < waypoints.length - 1){
-            routeTime += stepDuration;
-            currentWpIndex++;
-            stepDistance = dp.getDistanceMeters(waypoints[currentWpIndex], waypoints[currentWpIndex + 1]);
-            stepDuration = stepDistance / speed;
-        }
-        return routeTime;
-    }
-    
-    private double[] findPointByTime(Step step, double routeTime, double duration){
-        double[][] waypoints = step.getWaypoints();
-        double timeLeft = duration - routeTime;
-        double distFromLastWp = timeLeft * step.getSpeedMs();
-        double[] endPoint = dp.getPoint(waypoints[currentWpIndex], waypoints[currentStepIndex+1], distFromLastWp);
-        return endPoint;
-    }
-    
-    
-    public double computeDelay(double targetDistance){
+    /**
+     * Returns the time the car will move along the route
+     * until it's distance to the destination point becomes 
+     * almost equal to target distance of the winner.
+     * 
+     * @param targetDistance
+     * @return 
+     */
+    public double computeDelay(double targetDistance, double epsilon){
        
         double time = 0;
         boolean stop = false;
@@ -119,7 +108,7 @@ public class Car {
             double[][] waypoints = step.getWaypoints();
             while(currentWpIndex < waypoints.length){
                 double distFromNextStep = dp.getDistanceMeters(destination, waypoints[currentWpIndex]);
-                if(Math.abs(distFromNextStep - targetDistance) > 5){
+                if(Math.abs(distFromNextStep - targetDistance) > epsilon){
                     stop = true;
                     break;
                 }else{
@@ -149,6 +138,29 @@ public class Car {
         return time;
     }
 
+    
+    private double findWaypoint(Step step, double routeTime, double duration){
+        double[][] waypoints = step.getWaypoints();
+        double speed = step.getSpeedMs();
+        double stepDistance = dp.getDistanceMeters(waypoints[currentWpIndex], waypoints[currentWpIndex + 1]);
+        double stepDuration = stepDistance / speed;
+        while((routeTime + stepDuration) < duration && currentWpIndex < waypoints.length - 1){
+            routeTime += stepDuration;
+            currentWpIndex++;
+            stepDistance = dp.getDistanceMeters(waypoints[currentWpIndex], waypoints[currentWpIndex + 1]);
+            stepDuration = stepDistance / speed;
+        }
+        return routeTime;
+    }
+    
+    private double[] findPointByTime(Step step, double routeTime, double duration){
+        double[][] waypoints = step.getWaypoints();
+        double timeLeft = duration - routeTime;
+        double distFromLastWp = timeLeft * step.getSpeedMs();
+        double[] endPoint = dp.getPoint(waypoints[currentWpIndex], waypoints[currentStepIndex+1], distFromLastWp);
+        return endPoint;
+    }
+       
     
     private void reset(){
         currentStepIndex = 0;

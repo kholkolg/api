@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia
  */
 
 public class FailedResponse implements Response, Serializable {

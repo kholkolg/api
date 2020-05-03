@@ -13,8 +13,8 @@ import com.service.api.model.Car;
 import com.service.api.rest.Request;
 import com.service.api.rest.GoodResponse;
 import com.service.api.model.Route;
-import static com.service.api.json.TestJson.createTestRequest;
-import static com.service.api.json.TestJson.readRoutesFile;
+import static com.service.api.json.Main.createTestRequest;
+import static com.service.api.json.Main.readRoutesFile;
 import com.service.api.rest.Response;
 import com.service.api.routing.OSMRouteProvider;
 import com.service.api.routing.RouteProvider;
@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia 
  */
 public class Tests {
     
@@ -54,7 +54,7 @@ public class Tests {
                 response.addDelay(car.getRouteName(), 0);
                 continue;
             }
-            double delay = car.computeDelay(bestDist);
+            double delay = car.computeDelay(bestDist, 5);
             response.addDelay(car.getRouteName(), delay);
             System.out.println("route: "+car.getRouteName() + " , delay: "+delay);
         }
@@ -72,7 +72,7 @@ public class Tests {
     
     public static void test2(Request request){
         System.out.println("Test2:");
-        RequestProcessor processor = new RequestProcessor(null, null);
+        RequestProcessor processor = new RequestProcessor(null, null, 5);
         Response response = processor.processRequest(request);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -90,7 +90,7 @@ public class Tests {
         DistanceProvider dp = new Proj4jDistanceProvider();
         RouteProvider rp = new OSMRouteProvider("");
         
-        RequestProcessor processor = new RequestProcessor(dp, rp);
+        RequestProcessor processor = new RequestProcessor(dp, rp, 5);
         
         Response response = processor.processRequest(request);
          try {

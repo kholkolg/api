@@ -10,8 +10,9 @@ import com.service.api.model.Route;
 import java.util.List;
 
 /**
- *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ *Routing service interface
+ * 
+ * @author Olga Kholkovskaia 
  */
 public interface RouteProvider {
     

@@ -7,7 +7,7 @@ package com.service.api.rest;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia
  */
 public interface Response {
     

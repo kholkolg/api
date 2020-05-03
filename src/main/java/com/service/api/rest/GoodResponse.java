@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia 
  */
 //@Data
 //@Entity

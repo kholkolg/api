@@ -17,13 +17,13 @@ public interface DistanceProvider {
     /**
      * Returns distance in meters between two given points.
      * @param point1
-     * @param pointe
+     * @param point2
      * @return 
      */
-    public double getDistanceMeters(double[] point1, double[] pointe);
+    public double getDistanceMeters(double[] point1, double[] point2);
     
     /**
-     * Returns point lying the line between two points n meters from start.  
+     * Returns point lying on the line between two points n meters from start.  
      * 
      * @param point1
      * @param point2

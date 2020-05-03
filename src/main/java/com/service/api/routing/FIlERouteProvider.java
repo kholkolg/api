@@ -23,16 +23,13 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
-
-
 /**
  *
  * @author Olga Kholkovskaia 
  */
 public class FIlERouteProvider implements RouteProvider {
    final String dir;
-   static String URL = "http://router.project-osrm.org/route/v1/driving/";
-   
+    
    public FIlERouteProvider(String dir){
        if(dir.equals("")){
            this.dir = "/home/olga/NetBeansProjects/api/data/";
@@ -51,7 +48,7 @@ public class FIlERouteProvider implements RouteProvider {
        
         List<Route> routes = new ArrayList<>();
         Route route = null; 
-        Map<String, String> urlsMap = request.getOSMRequestUrls(URL, "");
+        Map<String, String> urlsMap = request.getOSMRequestUrls("", "");
         for(Map.Entry<String,String> e : urlsMap.entrySet()){
             StringBuilder sb = new StringBuilder();
             try(BufferedReader br = new BufferedReader(new FileReader(String.format("%s%s.json", dir, e.getKey())))){

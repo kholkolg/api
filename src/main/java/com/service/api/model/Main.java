@@ -8,18 +8,16 @@ package com.service.api.model;
 import com.service.api.rest.Request;
 import com.service.api.model.distance.DistanceProvider;
 import com.service.api.model.distance.Proj4jDistanceProvider;
-import static com.service.api.json.TestJson.createTestRequest;
-import static com.service.api.json.TestJson.readRoutesFile;
+import static com.service.api.json.Main.createTestRequest;
+import static com.service.api.json.Main.readRoutesFile;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia 
  */
 
-public class TestCarMovement {
+public class Main {
  
        
 	public static void main(String[] args) {
@@ -57,7 +55,7 @@ public class TestCarMovement {
             if(car.getRouteName().equals(bestRoute)){
                 continue;
             }
-            double delay = car.computeDelay(bestDist);
+            double delay = car.computeDelay(bestDist, 5);
             System.out.println("route: "+car.getRouteName() + " , delay: "+delay);
         }
 	}

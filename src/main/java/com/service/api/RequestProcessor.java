@@ -15,6 +15,7 @@ import com.service.api.rest.GoodResponse;
 import com.service.api.model.Route;
 import com.service.api.rest.FailedResponse;
 import com.service.api.rest.Response;
+import com.service.api.rest.RequestValidator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +27,14 @@ public class RequestProcessor {
     
         private final DistanceProvider dp;
         private final RouteProvider rp ;
+        private final RequestValidator rv;
+        private final double epsilon;
     
-    public RequestProcessor(DistanceProvider dp, RouteProvider rp){
+    public RequestProcessor(DistanceProvider dp, RouteProvider rp, double epsilon){
         this.dp = (dp == null) ? new Proj4jDistanceProvider() : dp;
         this.rp = (rp == null) ?  new FIlERouteProvider("") : rp;
+        this.rv = new RequestValidator();
+        this.epsilon = epsilon;
     }
     
     
@@ -54,17 +59,14 @@ public class RequestProcessor {
             }
         }
         // compute delays, save to response
-      
         GoodResponse response = new GoodResponse();
         for(Car car: cars){
-            double delay = car.getRouteName().equals(bestRoute) ? 0 : car.computeDelay(bestDist);
+            double delay = car.getRouteName().equals(bestRoute) ? 0 : car.computeDelay(bestDist, epsilon);
             response.addDelay(car.getRouteName(), delay);
         }
         if(!response.isComplete()){
             return new FailedResponse("Incomplete response. " + response);
         }
         return response;
-
     }
-    
 }

@@ -8,8 +8,10 @@ package com.service.api.db;
 import java.util.List;
 
 /**
- *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * Mock repository.
+ * @author Olga Kholkovskaia 
+ * @param <Long> entity's id
+ * @param <T> entity type
  */
 public interface MockRepository<Long, T> {
     

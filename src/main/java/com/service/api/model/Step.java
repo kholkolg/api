@@ -10,7 +10,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 
 /**
- *
+ * Step of the route with time, distance, and list of coordinate pairs.
+ * 
  * @author Olga Kholkovskaia
  */
 @JsonDeserialize(using = StepDeserializer.class)

@@ -6,14 +6,12 @@
 package com.service.api.json;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.api.model.Route;
 import com.service.api.model.Step;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.logging.Logger;
 
 /**
  * Deserializer for Route.
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia
  */
 
 public class RouteDeserializer extends JsonDeserializer<Route> {

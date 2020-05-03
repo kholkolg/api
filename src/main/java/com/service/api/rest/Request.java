@@ -16,7 +16,8 @@ import java.util.Map;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * 
+ * @author Olga Kholkovskaia 
  */
 //@Data
 //@Entity
@@ -52,6 +53,10 @@ public class Request implements Serializable {
     @Override
     public String toString() {
         return "Request{" + "origin=" + origin + ", destination=" + destination + ", time=" + time + ", waypoints=" + waypoints + '}';
+    }
+
+    public List<Map<String, Double>> getWaypoints() {
+        return waypoints;
     }
 
     public double getTime() {

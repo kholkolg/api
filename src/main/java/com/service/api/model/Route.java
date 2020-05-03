@@ -13,8 +13,10 @@ import org.springframework.context.annotation.Bean;
 
 
 /**
- *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * Route returned by OSMR.
+ * With steps from both legs joined to one list.
+ * 
+ * @author Olga Kholkovskaia
  */
 
 @JsonDeserialize(using = RouteDeserializer.class)

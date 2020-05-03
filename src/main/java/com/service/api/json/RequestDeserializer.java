@@ -19,14 +19,14 @@ import java.util.logging.Logger;
 
 
 /**
- * Deserializer for Request
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * Deserializer for Request.
+ * All exceptions are handled in BadRequestHandler.
+ * 
+ * @author Olga Kholkovskaia 
  */
 
 public class RequestDeserializer extends JsonDeserializer<Request>  {
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    
-    private final static String[] requiredFields = new String[]{"x-secret", "time", "origin", "destination","waypoints"};
  
     @Override
     public Request deserialize(JsonParser jp, DeserializationContext ctxt)   {

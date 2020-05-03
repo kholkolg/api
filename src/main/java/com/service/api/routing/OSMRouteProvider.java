@@ -51,10 +51,10 @@ public class OSMRouteProvider implements RouteProvider {
     }
    
     /**
-     * Request to routes.
+     * Sends request to OSM routing service..
      * 
      * @param request .
-     * @return
+     * @return routes returned by OSM
      */
     @Override
     public List<Route> getRoutes(Request request){
