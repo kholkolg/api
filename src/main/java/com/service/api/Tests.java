@@ -7,12 +7,12 @@ package com.service.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.api.distance.DistanceProvider;
-import com.service.api.distance.Proj4jDistanceProvider;
-import com.service.api.entities.Car;
-import com.service.api.entities.Request;
-import com.service.api.entities.Response;
-import com.service.api.entities.Route;
+import com.service.api.model.distance.DistanceProvider;
+import com.service.api.model.distance.Proj4jDistanceProvider;
+import com.service.api.model.Car;
+import com.service.api.rest.Request;
+import com.service.api.rest.Response;
+import com.service.api.model.Route;
 import static com.service.api.json.TestJson.createTestRequest;
 import static com.service.api.json.TestJson.readRoutesFile;
 import com.service.api.routing.OSMRouteProvider;
@@ -85,7 +85,7 @@ public class Tests {
     }
     
     public static void testOsmr(Request request){
-          System.out.println("TestOsm:");
+        System.out.println("TestOsm:");
         DistanceProvider dp = new Proj4jDistanceProvider();
         RouteProvider rp = new OSMRouteProvider("");
         
@@ -111,8 +111,8 @@ public class Tests {
             System.exit(-1);
         }
         double time = 180;
-        test1(request, time);
-        test2(request);
+//        test1(request, time);
+//        test2(request);
         testOsmr(request);
        
         

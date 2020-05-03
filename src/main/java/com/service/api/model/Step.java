@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.service.api.entities;
+package com.service.api.model;
 
 import com.service.api.json.StepDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

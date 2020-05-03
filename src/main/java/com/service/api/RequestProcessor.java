@@ -5,24 +5,27 @@
  */
 package com.service.api;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.service.api.routing.FIlERouteProvider;
 import com.service.api.routing.RouteProvider;
-import com.service.api.distance.DistanceProvider;
-import com.service.api.distance.Proj4jDistanceProvider;
-import com.service.api.entities.Car;
-import com.service.api.entities.Request;
-import com.service.api.entities.Response;
-import com.service.api.entities.Route;
+import com.service.api.model.distance.DistanceProvider;
+import com.service.api.model.distance.Proj4jDistanceProvider;
+import com.service.api.model.Car;
+import com.service.api.rest.Request;
+import com.service.api.rest.Response;
+import com.service.api.model.Route;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  *
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
 public class RequestProcessor {
+    
         private final DistanceProvider dp;
         private final RouteProvider rp ;
     
@@ -33,7 +36,6 @@ public class RequestProcessor {
     
     
     public Response processRequest(Request request){
-        
         // find routes
         List<Route> routes = rp.getRoutes(request);
         List<Car> cars = new ArrayList<>();
@@ -50,7 +52,6 @@ public class RequestProcessor {
                 bestRoute = car.getRouteName();
             }
         }
-        
         // compute delays, save to response
         Response response = new Response();
         for(Car car: cars){

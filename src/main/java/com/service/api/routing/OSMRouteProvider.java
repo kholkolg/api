@@ -5,23 +5,23 @@
  */
 package com.service.api.routing;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.api.entities.Request;
-import com.service.api.entities.Route;
-import com.service.api.entities.Step;
+import com.service.api.rest.Request;
+import com.service.api.model.Route;
+
 import java.io.IOException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.IOUtils;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -92,7 +92,7 @@ public class OSMRouteProvider implements RouteProvider {
         JsonNode result = getOSMResponse(url);
         String code = result.get("code").asText().toLowerCase();
         if(!code.equals("ok")){
-            Logger.getLogger(OSMRouteProvider.class.getName()).log(Level.SEVERE, "osm error {0}", code);
+            Logger.getLogger(OSMRouteProvider.class.getName()).log(Level.SEVERE, null, code);
             return null;
         }
         JsonNode routeObj = result.get("routes").get(0);

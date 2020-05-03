@@ -1,13 +1,13 @@
-package com.service.api.entities;
+package com.service.api.rest;
 
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.ArrayList;
+import com.service.api.json.RequestDeserializer;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,37 +18,61 @@ import java.util.Map;
  *
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
-
-public class Request {
-
-
+//@Data
+//@Entity
+@JsonDeserialize(using = RequestDeserializer.class)
+public class Request implements Serializable {
+//
+////    @EmbeddedId
+    private Long id;
    
-    @JsonProperty("time")
-    private float time;
+//    @JsonProperty("time")
+    private double time;
     
-    @JsonProperty("x-secret")
+//    @JsonProperty("x-secret")
     private String xSecret;
     
-    @JsonProperty("origin")
-    @JsonDeserialize 
+//    @JsonProperty("origin")
+//    @JsonDeserialize 
     private Map<String, String> origin;
     
-    @JsonProperty("destination")
-    @JsonDeserialize 
+//    @JsonProperty("destination")
+//    @JsonDeserialize 
     private Map<String, String> destination;
  
-    @JsonProperty("waypoints")
-    @JsonDeserialize 
-    private Map<String, String>[] waypoints;
-    
+//    @JsonProperty("waypoints")
+//    @JsonDeserialize 
+    private List<Map<String, String>> waypoints;
+
+    public Request(double time, Map<String, String> origin, Map<String, String> destination, 
+        List<Map<String, String>> waypoints, String xSecret) {
+        this.time = time;
+        this.origin = origin;
+        this.destination = destination;
+        this.waypoints = waypoints;
+        this.xSecret = xSecret;
+    }
+          
 
     @Override
     public String toString() {
         return "Request{" + "origin=" + origin + ", destination=" + destination + ", time=" + time + ", waypoints=" + waypoints + '}';
     }
 
-    public float getTime() {
+    public double getTime() {
         return time;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getxSecret() {
+        return xSecret;
     }
 
       
@@ -71,7 +95,6 @@ public class Request {
            sb.append(pointToString(origin)).append(";");
            sb.append(pointToString(point)).append(";");
            sb.append(pointToString(this.destination)).append("?");
-           //TODO pass as args
            sb.append(postfix);
            urls.put(point.get("name"), sb.toString());
         }

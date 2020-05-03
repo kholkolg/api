@@ -3,17 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.service.api.routing;
+package com.service.api.db;
 
-import com.service.api.rest.Request;
-import com.service.api.model.Route;
 import java.util.List;
 
 /**
  *
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
-public interface RouteProvider {
+public interface MockRepository<Long, T> {
     
-     public List<Route> getRoutes(Request request);
+    public void save(Long id, T entity);
+    
+    public T findById(Long id);   
+    
+    public List<T> findAll();
 }

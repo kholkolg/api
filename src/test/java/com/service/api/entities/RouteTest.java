@@ -5,6 +5,8 @@
  */
 package com.service.api.entities;
 
+import com.service.api.model.Route;
+import com.service.api.model.Step;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;

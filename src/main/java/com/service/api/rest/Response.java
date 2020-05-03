@@ -3,26 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.service.api.entities;
+package com.service.api.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import lombok.Data;
 
 /**
  *
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
-public class Response {
+//@Data
+//@Entity
+public class Response implements Serializable {
     
-     @JsonProperty("winnerName")
+  
+//    @EmbeddedId
+//    private Long id;
+//    
+//    private Long requestId;
+    
+    @JsonProperty("winnerName")
     private String winnerName;
     
     @JsonProperty("delays")
     @JsonSerialize 
     private Map<String, Double> delays;
+    
     
     public Response(){
         this.delays = new HashMap<>();
@@ -34,7 +46,10 @@ public class Response {
            winnerName = name;
        }
    }
-
+   public boolean isValid(){
+        return !(winnerName == null || winnerName.equals("") || delays.isEmpty());
+   }
+   
     @Override
     public String toString() {
         StringBuilder sb  = new StringBuilder("Response{");

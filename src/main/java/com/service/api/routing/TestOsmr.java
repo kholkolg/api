@@ -5,8 +5,8 @@
  */
 package com.service.api.routing;
 
-import com.service.api.entities.Request;
-import com.service.api.entities.Route;
+import com.service.api.rest.Request;
+import com.service.api.model.Route;
 import static com.service.api.json.TestJson.createTestRequest;
 import java.util.List;
 

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.service.api.entities;
+package com.service.api.model;
 
-import com.service.api.distance.DistanceProvider;
+import com.service.api.model.distance.DistanceProvider;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 public class Car {
      
-    @Autowired
-    @Qualifier("haversineDistanceProvider")
     private DistanceProvider dp;
        
     private final String routeName;

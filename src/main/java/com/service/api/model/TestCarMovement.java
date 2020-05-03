@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.service.api.entities;
+package com.service.api.model;
 
-import com.service.api.distance.DistanceProvider;
-import com.service.api.distance.Proj4jDistanceProvider;
+import com.service.api.rest.Request;
+import com.service.api.model.distance.DistanceProvider;
+import com.service.api.model.distance.Proj4jDistanceProvider;
 import static com.service.api.json.TestJson.createTestRequest;
 import static com.service.api.json.TestJson.readRoutesFile;
 import java.util.ArrayList;
