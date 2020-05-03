@@ -5,14 +5,12 @@
  */
 package com.service.api.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import lombok.Data;
 
 /**
  *
@@ -46,6 +44,7 @@ public class Response implements Serializable {
            winnerName = name;
        }
    }
+   @JsonIgnore
    public boolean isValid(){
         return !(winnerName == null || winnerName.equals("") || delays.isEmpty());
    }

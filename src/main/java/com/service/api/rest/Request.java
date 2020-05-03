@@ -27,22 +27,22 @@ public class Request implements Serializable {
     private Long id;
    
 //    @JsonProperty("time")
-    private double time;
+    private final double time;
     
 //    @JsonProperty("x-secret")
-    private String xSecret;
+    private final String xSecret;
     
 //    @JsonProperty("origin")
 //    @JsonDeserialize 
-    private Map<String, String> origin;
+    private final Map<String, String> origin;
     
 //    @JsonProperty("destination")
 //    @JsonDeserialize 
-    private Map<String, String> destination;
+    private final Map<String, String> destination;
  
 //    @JsonProperty("waypoints")
 //    @JsonDeserialize 
-    private List<Map<String, String>> waypoints;
+    private final List<Map<String, String>> waypoints;
 
     public Request(double time, Map<String, String> origin, Map<String, String> destination, 
         List<Map<String, String>> waypoints, String xSecret) {
@@ -70,7 +70,7 @@ public class Request implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     public String getxSecret() {
         return xSecret;
     }

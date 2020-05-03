@@ -18,7 +18,8 @@ import com.service.api.rest.Response;
 import com.service.api.routing.OSMRouteProvider;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-import lombok.extern.slf4j.Slf4j;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
-@Slf4j
 @RestController
 public class MainController {
+    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    
     private final AtomicLong idGenerator = new AtomicLong(0L);
     private final MockRepository<Long, Request> requests = new MockRepositoryImpl<>();
     private final MockRepository<Long, Response> responses = new MockRepositoryImpl<>();
@@ -40,23 +42,23 @@ public class MainController {
 
 	@PostMapping("/api")
 	public String newRequest(@RequestBody Request request){
-        log.debug(request.toString());
+        LOGGER.info(request.toString());
         
         if(request.getxSecret() == null || !request.getxSecret().equals("Mileus")){
-            log.debug("anauthorized request");
+            LOGGER.severe("anauthorized request");
             return "Anauthorized request.";
         }
         Response response = processor.processRequest(request);
         responses.save(request.getId(), response);
         if(!response.isValid()){
-            log.debug("bad response "+response);
+            LOGGER.log(Level.SEVERE, "bad response {0}", response);
             return "Invalid response.";
         }
         String responseStr;
         try {
             responseStr = new ObjectMapper().writeValueAsString(response);
         } catch (JsonProcessingException ex) {
-            log.error(ex.getMessage());
+            LOGGER.severe(ex.getMessage());
             return "Invalid response.";
         }
         return responseStr;
