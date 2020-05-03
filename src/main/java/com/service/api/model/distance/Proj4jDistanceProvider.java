@@ -22,7 +22,10 @@ public class Proj4jDistanceProvider implements DistanceProvider{
     
     private final BasicCoordinateTransform transformFromMetric;
     
+    private final double minDist;
+    
     public Proj4jDistanceProvider(){
+        this.minDist = 1;
         
         CRSFactory factory = new CRSFactory();
         CoordinateReferenceSystem srcCrs = factory.createFromName("EPSG:4326");
@@ -48,6 +51,9 @@ public class Proj4jDistanceProvider implements DistanceProvider{
         double[] destProjected = projectPoint(destination, true);
         
         double dist = getDistance(originProjected, destProjected);
+        if(dist < minDist){
+            return origin;
+        }
         double alpha = distFromOrigin/dist;
         double dX = destProjected[0] - originProjected[0];
         double dY = destProjected[1] - originProjected[1];
