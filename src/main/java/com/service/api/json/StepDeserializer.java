@@ -15,6 +15,8 @@ import com.service.api.model.Step;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -25,21 +27,26 @@ import java.util.List;
 public class StepDeserializer extends JsonDeserializer<Step> {
 
     @Override
-    public Step deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Step deserialize(JsonParser jp, DeserializationContext ctxt) {
         
-        ObjectMapper mapper = new ObjectMapper();
-        
-        final JsonNode rootNode = jp.getCodec().readTree(jp);
-        
-        final Double distance = rootNode.get("distance").asDouble();
-        
-        final Double duration = rootNode.get("duration").asDouble();
-   
-        final JsonNode wpNodes = rootNode.get("geometry").get("coordinates");
-        
-        double[][] waypoints = mapper.convertValue(wpNodes, double[][].class);
-        
-        return new Step(duration, distance, waypoints);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            
+            final JsonNode rootNode = jp.getCodec().readTree(jp);
+            
+            final Double distance = rootNode.get("distance").asDouble();
+            
+            final Double duration = rootNode.get("duration").asDouble();
+            
+            final JsonNode wpNodes = rootNode.get("geometry").get("coordinates");
+            
+            double[][] waypoints = mapper.convertValue(wpNodes, double[][].class);
+            
+            return new Step(duration, distance, waypoints);
+        } catch (Exception ex) {
+            Logger.getLogger(StepDeserializer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
   
 }

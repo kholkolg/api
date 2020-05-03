@@ -5,24 +5,22 @@
  */
 package com.service.api;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.service.api.routing.FIlERouteProvider;
 import com.service.api.routing.RouteProvider;
 import com.service.api.model.distance.DistanceProvider;
 import com.service.api.model.distance.Proj4jDistanceProvider;
 import com.service.api.model.Car;
 import com.service.api.rest.Request;
-import com.service.api.rest.Response;
+import com.service.api.rest.GoodResponse;
 import com.service.api.model.Route;
+import com.service.api.rest.FailedResponse;
+import com.service.api.rest.Response;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia
  */
 public class RequestProcessor {
     
@@ -38,6 +36,9 @@ public class RequestProcessor {
     public Response processRequest(Request request){
         // find routes
         List<Route> routes = rp.getRoutes(request);
+        if(routes == null || routes.isEmpty()){
+            return new FailedResponse("Routes not found");
+        }
         List<Car> cars = new ArrayList<>();
         
         //find winner and it's distance to the destination
@@ -53,10 +54,14 @@ public class RequestProcessor {
             }
         }
         // compute delays, save to response
-        Response response = new Response();
+      
+        GoodResponse response = new GoodResponse();
         for(Car car: cars){
             double delay = car.getRouteName().equals(bestRoute) ? 0 : car.computeDelay(bestDist);
             response.addDelay(car.getRouteName(), delay);
+        }
+        if(!response.isComplete()){
+            return new FailedResponse("Incomplete response. " + response);
         }
         return response;
 

@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -28,33 +30,38 @@ public class RouteDeserializer extends JsonDeserializer<Route> {
     
       
     @Override
-    public Route deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Route deserialize(JsonParser jp, DeserializationContext ctxt) {
         
-        ObjectMapper mapper = new ObjectMapper();
-        
-        final JsonNode rootNode = jp.getCodec().readTree(jp);
-        
-        final Double distance = rootNode.get("distance").asDouble();
-        
-        final Double duration = rootNode.get("duration").asDouble();
-        
-        final List<Step> steps = new LinkedList<>();
-        
-        final JsonNode legNodes = rootNode.get("legs");
-        
-        if (legNodes.isArray()) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
             
-            for (final JsonNode legNode : legNodes) {
+            final JsonNode rootNode = jp.getCodec().readTree(jp);
+            
+            final Double distance = rootNode.get("distance").asDouble();
+            
+            final Double duration = rootNode.get("duration").asDouble();
+            
+            final List<Step> steps = new LinkedList<>();
+            
+            final JsonNode legNodes = rootNode.get("legs");
+            
+            if (legNodes.isArray()) {
                 
-                final JsonNode stepNodes = legNode.get("steps");
-                
-                List<Step> legSteps = Arrays.asList(mapper.convertValue(stepNodes, Step[].class));
-                
-                steps.addAll(legSteps);
+                for (final JsonNode legNode : legNodes) {
+                    
+                    final JsonNode stepNodes = legNode.get("steps");
+                    
+                    List<Step> legSteps = Arrays.asList(mapper.convertValue(stepNodes, Step[].class));
+                    
+                    steps.addAll(legSteps);
+                }
             }
+            
+            return new Route(duration, distance, steps);
+        } catch (Exception ex) {
+            Logger.getLogger(RouteDeserializer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    return new Route(duration, distance, steps);
+        return null;
   }
 }
 

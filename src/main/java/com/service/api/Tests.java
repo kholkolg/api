@@ -11,10 +11,11 @@ import com.service.api.model.distance.DistanceProvider;
 import com.service.api.model.distance.Proj4jDistanceProvider;
 import com.service.api.model.Car;
 import com.service.api.rest.Request;
-import com.service.api.rest.Response;
+import com.service.api.rest.GoodResponse;
 import com.service.api.model.Route;
 import static com.service.api.json.TestJson.createTestRequest;
 import static com.service.api.json.TestJson.readRoutesFile;
+import com.service.api.rest.Response;
 import com.service.api.routing.OSMRouteProvider;
 import com.service.api.routing.RouteProvider;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class Tests {
             }
         }
         System.out.println("Winner :" + bestRoute + ", dist " + bestDist);
-        Response response = new Response();
+        GoodResponse response = new GoodResponse();
         for(Car car: cars){
             
             System.out.println("Car "+car.getRouteName());

@@ -10,14 +10,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.api.model.Route;
 import com.service.api.rest.Request;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+
 
 
 /**
@@ -25,34 +25,41 @@ import java.util.Map;
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
 
-public class RequestDeserializer extends JsonDeserializer<Request> {
+public class RequestDeserializer extends JsonDeserializer<Request>  {
+    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     
-      
+    private final static String[] requiredFields = new String[]{"x-secret", "time", "origin", "destination","waypoints"};
+ 
     @Override
-    public Request deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Request deserialize(JsonParser jp, DeserializationContext ctxt)   {
         
-        final JsonNode rootNode = jp.getCodec().readTree(jp);
-        
-        final String xSecret = rootNode.get("x-secret").asText();
-        final double time = rootNode.get("time").asDouble();
-        
-        final JsonNode originNode = rootNode.get("origin");
-        final JsonNode destinationNode = rootNode.get("destination");
-        final JsonNode waypointNodes = rootNode.get("waypoints");
-        
-        final Map<String, String> origin = pointNode2map(originNode);
-        final Map<String, String> destination =  pointNode2map(destinationNode);
-     
-        List<Map<String, String>> waypoints = new LinkedList<>();     
-        if (waypointNodes.isArray()) {
-            for (final JsonNode wpNode : waypointNodes) {
-                Map<String, String> wp = pointNode2map(wpNode);
-                waypoints.add(wp);
+        JsonNode rootNode;
+        try {
+            rootNode = jp.getCodec().readTree(jp);
+            final String xSecret = rootNode.get("x-secret").asText();
+            final double time = rootNode.get("time").asDouble();
+
+            final JsonNode originNode = rootNode.get("origin");
+            final JsonNode destinationNode = rootNode.get("destination");
+
+            final JsonNode waypointNodes = rootNode.get("waypoints");
+
+            final Map<String, String> origin = pointNode2map(originNode);
+            final Map<String, String> destination =  pointNode2map(destinationNode);
+
+            List<Map<String, String>> waypoints = new LinkedList<>();     
+            if (waypointNodes.isArray()) {
+                for (final JsonNode wpNode : waypointNodes) {
+                    Map<String, String> wp = pointNode2map(wpNode);
+                    waypoints.add(wp);
+                }
+            return new Request(time, origin, destination, waypoints, xSecret);
             }
+        } catch (Exception ex) {
+            LOGGER.severe(ex.getMessage());
         }
-        
-    return new Request(time, origin, destination, waypoints, xSecret);
-  }
+        return null;
+    }
     
     private Map<String, String> pointNode2map(JsonNode pointNode){
         Map<String, String> point = new HashMap<>();
@@ -63,5 +70,20 @@ public class RequestDeserializer extends JsonDeserializer<Request> {
          }
          return point;
     }
+    
+    private boolean checkFields(JsonNode requestNode){
+//        for(String field : requiredFields){
+//            if(requestNode.get(field) == null){
+//                return false;
+//            }
+//        }
+        return true;
+
+    }
+    
+//    private boolean checkCoordinates(JsonNode pointNode){
+//        return pointNode.get("lon") != null && pointNode.get("lat") != null;
+//        
+//    }
 }
 

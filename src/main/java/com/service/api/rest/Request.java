@@ -26,22 +26,17 @@ public class Request implements Serializable {
 ////    @EmbeddedId
     private Long id;
    
-//    @JsonProperty("time")
     private final double time;
     
-//    @JsonProperty("x-secret")
     private final String xSecret;
     
-//    @JsonProperty("origin")
-//    @JsonDeserialize 
+
     private final Map<String, String> origin;
     
-//    @JsonProperty("destination")
-//    @JsonDeserialize 
+
     private final Map<String, String> destination;
  
-//    @JsonProperty("waypoints")
-//    @JsonDeserialize 
+
     private final List<Map<String, String>> waypoints;
 
     public Request(double time, Map<String, String> origin, Map<String, String> destination, 

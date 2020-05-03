@@ -13,7 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.api.db.MockRepository;
 import com.service.api.db.MockRepositoryImpl;
 import com.service.api.model.distance.Proj4jDistanceProvider;
+import com.service.api.rest.FailedResponse;
 import com.service.api.rest.Request;
+import com.service.api.rest.GoodResponse;
 import com.service.api.rest.Response;
 import com.service.api.routing.OSMRouteProvider;
 import java.util.List;
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia
  */
 @RestController
 public class MainController {
@@ -41,27 +43,27 @@ public class MainController {
     
 
 	@PostMapping("/api")
-	public String newRequest(@RequestBody Request request){
+	public Response newRequest(@RequestBody Request request){
         LOGGER.info(request.toString());
-        
+   
         if(request.getxSecret() == null || !request.getxSecret().equals("Mileus")){
-            LOGGER.severe("anauthorized request");
-            return "Anauthorized request.";
+            return new FailedResponse("Anauthorized request.");
         }
+        
         Response response = processor.processRequest(request);
         responses.save(request.getId(), response);
-        if(!response.isValid()){
-            LOGGER.log(Level.SEVERE, "bad response {0}", response);
-            return "Invalid response.";
-        }
-        String responseStr;
-        try {
-            responseStr = new ObjectMapper().writeValueAsString(response);
-        } catch (JsonProcessingException ex) {
-            LOGGER.severe(ex.getMessage());
-            return "Invalid response.";
-        }
-        return responseStr;
+//        if(response.getClass() == FailedResponse.class){
+//            LOGGER.log(Level.SEVERE, "bad response {0}", response);
+////            return "Invalid response.";
+//        }
+//        String responseStr;
+//        try {
+//            responseStr = new ObjectMapper().writeValueAsString(response);
+//        } catch (JsonProcessingException ex) {
+//            LOGGER.severe(ex.getMessage());
+////            return "Invalid response.";
+//        }
+        return response;
     }
         
     @GetMapping("/api/requests")
