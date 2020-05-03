@@ -95,6 +95,7 @@ public class Tests {
          try {
             //Object to JSON in String
             String jsonString = new ObjectMapper().writeValueAsString(response);
+//          {"winnerName":"Point B","delays":{"Point C":30.841516795702823,"Point B":0.0,"Point A":79.85632108712774}}
             System.out.println("JsonResponse \n"+jsonString);
         } catch (JsonProcessingException ex) {
             Logger.getLogger(Tests.class.getName()).log(Level.SEVERE, null, ex);
