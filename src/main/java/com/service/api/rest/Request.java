@@ -30,21 +30,21 @@ public class Request implements Serializable {
     
     private final String xSecret;
     
-
-    private final Map<String, String> origin;
+    private final Map<String, Double> origin;
     
+    private final Map<String, Double> destination;
+    
+    private final List<String> waypointNames;
+    
+    private final List<Map<String, Double>> waypoints;
 
-    private final Map<String, String> destination;
- 
-
-    private final List<Map<String, String>> waypoints;
-
-    public Request(double time, Map<String, String> origin, Map<String, String> destination, 
-        List<Map<String, String>> waypoints, String xSecret) {
+    public Request(double time, Map<String, Double> origin, Map<String, Double> destination, 
+         List<String> waypointNames, List<Map<String, Double>> waypoints, String xSecret) {
         this.time = time;
         this.origin = origin;
         this.destination = destination;
         this.waypoints = waypoints;
+        this.waypointNames = waypointNames;
         this.xSecret = xSecret;
     }
           
@@ -69,9 +69,8 @@ public class Request implements Serializable {
     public String getxSecret() {
         return xSecret;
     }
-
       
-    private String pointToString(Map<String, String> point){
+    private String pointToString(Map<String, Double> point){
         return String.format("%s,%s", point.get("lon"), point.get("lat"));
     }
     
@@ -85,13 +84,14 @@ public class Request implements Serializable {
                
         Map<String, String> urls = new HashMap<>();
         
-        for (Map<String, String> point : this.waypoints){
+        for (int i = 0; i < waypoints.size(); i ++){
+           Map<String, Double> point = waypoints.get(i);
            StringBuilder sb = new StringBuilder(prefix);
            sb.append(pointToString(origin)).append(";");
            sb.append(pointToString(point)).append(";");
            sb.append(pointToString(this.destination)).append("?");
            sb.append(postfix);
-           urls.put(point.get("name"), sb.toString());
+           urls.put(waypointNames.get(i), sb.toString());
         }
         return urls;
     }
@@ -101,8 +101,10 @@ public class Request implements Serializable {
      * @return
      */
     public double[] getDestination() {
-        return new double[]{Double.parseDouble(destination.get("lon")), Double.parseDouble(destination.get("lat"))};
+        return new double[]{destination.get("lon"), destination.get("lat")};
     }
   
-
+    public double[] getOrigin() {
+        return new double[]{origin.get("lon"), origin.get("lat")};
+    }
 }

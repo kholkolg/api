@@ -52,17 +52,6 @@ public class MainController {
         
         Response response = processor.processRequest(request);
         responses.save(request.getId(), response);
-//        if(response.getClass() == FailedResponse.class){
-//            LOGGER.log(Level.SEVERE, "bad response {0}", response);
-////            return "Invalid response.";
-//        }
-//        String responseStr;
-//        try {
-//            responseStr = new ObjectMapper().writeValueAsString(response);
-//        } catch (JsonProcessingException ex) {
-//            LOGGER.severe(ex.getMessage());
-////            return "Invalid response.";
-//        }
         return response;
     }
         

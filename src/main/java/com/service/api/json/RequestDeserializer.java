@@ -6,12 +6,10 @@
 package com.service.api.json;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.service.api.rest.Request;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,16 +42,18 @@ public class RequestDeserializer extends JsonDeserializer<Request>  {
 
             final JsonNode waypointNodes = rootNode.get("waypoints");
 
-            final Map<String, String> origin = pointNode2map(originNode);
-            final Map<String, String> destination =  pointNode2map(destinationNode);
-
-            List<Map<String, String>> waypoints = new LinkedList<>();     
+            final Map<String, Double> origin = pointNode2map(originNode);
+            final Map<String, Double> destination =  pointNode2map(destinationNode);
+            
+            List<String> waypointNames = new LinkedList<>();
+            List<Map<String, Double>> waypoints = new LinkedList<>();     
             if (waypointNodes.isArray()) {
                 for (final JsonNode wpNode : waypointNodes) {
-                    Map<String, String> wp = pointNode2map(wpNode);
+                    Map<String, Double> wp = pointNode2map(wpNode);
+                    waypointNames.add(wpNode.get("name").asText());
                     waypoints.add(wp);
                 }
-            return new Request(time, origin, destination, waypoints, xSecret);
+            return new Request(time, origin, destination, waypointNames, waypoints, xSecret);
             }
         } catch (Exception ex) {
             LOGGER.severe(ex.getMessage());
@@ -61,29 +61,11 @@ public class RequestDeserializer extends JsonDeserializer<Request>  {
         return null;
     }
     
-    private Map<String, String> pointNode2map(JsonNode pointNode){
-        Map<String, String> point = new HashMap<>();
-         point.put("lat",  pointNode.get("lat").asText());
-         point.put("lon",  pointNode.get("lon").asText());
-         if(pointNode.get("name") != null){
-             point.put("name",  pointNode.get("name").asText());
-         }
+    private Map<String, Double> pointNode2map(JsonNode pointNode){
+        Map<String, Double> point = new HashMap<>();
+         point.put("lat",  pointNode.get("lat").asDouble());
+         point.put("lon",  pointNode.get("lon").asDouble());
          return point;
     }
-    
-    private boolean checkFields(JsonNode requestNode){
-//        for(String field : requiredFields){
-//            if(requestNode.get(field) == null){
-//                return false;
-//            }
-//        }
-        return true;
-
-    }
-    
-//    private boolean checkCoordinates(JsonNode pointNode){
-//        return pointNode.get("lon") != null && pointNode.get("lat") != null;
-//        
-//    }
 }
 
