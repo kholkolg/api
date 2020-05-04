@@ -5,7 +5,7 @@
  */
 package com.service.api.db;
 
-import com.service.api.errorHandlers.UserNotFoundException;
+import com.service.api.db.errorHandlers.UserNotFoundException;
 
 /**
  *
