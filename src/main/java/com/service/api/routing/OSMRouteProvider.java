@@ -62,7 +62,9 @@ public class OSMRouteProvider implements RouteProvider {
          Map<String, String> urlsMap = request.getOSMRequestUrls(url, osmParams);
         for(Map.Entry<String,String> e : urlsMap.entrySet()){
             Route route = getRoute(e.getKey(), e.getValue());
-            routes.add(route);
+            if(route != null){
+                routes.add(route);
+            }
         }  
         return routes;
     }
@@ -89,15 +91,20 @@ public class OSMRouteProvider implements RouteProvider {
 
     private Route getRoute(String name, String url){
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode result = getOSMResponse(url);
-        String code = result.get("code").asText().toLowerCase();
-        if(!code.equals("ok")){
-            Logger.getLogger(OSMRouteProvider.class.getName()).log(Level.SEVERE, null, code);
-            return null;
+        Route route = null;
+        try{
+            JsonNode result = getOSMResponse(url);
+            String code = result.get("code").asText().toLowerCase();
+            if(!code.equals("ok")){
+                Logger.getLogger(OSMRouteProvider.class.getName()).log(Level.SEVERE, null, code);
+                return null;
+            }
+            JsonNode routeObj = result.get("routes").get(0);
+            route = mapper.convertValue(routeObj, Route.class);
+            route.setName(name);
+        }catch(Exception ex){
+            Logger.getLogger(OSMRouteProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
-        JsonNode routeObj = result.get("routes").get(0);
-        Route route = mapper.convertValue(routeObj, Route.class);
-        route.setName(name);
  
         return route;        
     }
