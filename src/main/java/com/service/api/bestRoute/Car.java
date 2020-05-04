@@ -8,6 +8,7 @@ package com.service.api.bestRoute;
 import com.service.api.model.Route;
 import com.service.api.model.Step;
 import com.service.api.model.distance.DistanceProvider;
+import java.util.Arrays;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,8 +133,10 @@ public class Car {
         double[] point2 = new double[2];
         if(currentWpIndex < waypoints.length-1){
              point2 = waypoints[currentWpIndex + 1];
-        }else{
+        }else if(currentStepIndex < steps.size()){
             point2 = steps.get(currentStepIndex+1).getWaypoints()[0];
+        }else{
+            point2 = point1;
         }
         double dist = dp.getDistanceFromPoint1(point1, point2, destination, targetDistance);
         time = dist/ steps.get(currentStepIndex).getSpeedMs();      
