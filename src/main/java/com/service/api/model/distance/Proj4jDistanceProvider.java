@@ -6,6 +6,8 @@
 package com.service.api.model.distance;
 
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.osgeo.proj4j.BasicCoordinateTransform;
 import org.osgeo.proj4j.CRSFactory;
 import org.osgeo.proj4j.CoordinateReferenceSystem;
@@ -17,7 +19,7 @@ import org.osgeo.proj4j.ProjCoordinate;
  */
 //@Service("Proj4jDistanceProvider")
 public class Proj4jDistanceProvider implements DistanceProvider{
-    
+    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private final BasicCoordinateTransform transformToMetric;
     
     private final BasicCoordinateTransform transformFromMetric;
@@ -52,8 +54,8 @@ public class Proj4jDistanceProvider implements DistanceProvider{
         double[] destProjected = projectPoint(destination, true);
         
         double dist = getDistance(originProjected, destProjected);
-        //if it too close to origin
-        if(dist < minDist){
+        //if waypoints are closer than min distance, stop at the first waypoint
+        if(tooClose(dist)){
             return origin;
         }
         double alpha = distFromOrigin/dist;
@@ -84,18 +86,48 @@ public class Proj4jDistanceProvider implements DistanceProvider{
     public double getDistanceFromPoint1(double[] point1, double[] point2, double[] destination, double distToDestination) {
         double[] point1Projected = projectPoint(point1, true);
         double[] point2Projected = projectPoint(point2, true);
+        //if waypoints are closer than min distance, stop at the first waypoint
+        if(tooClose(point1Projected, point2Projected)){
+            return 0;
+        }
+        
         double[] destinationProjected = projectPoint(destination, true);
         
+        //a^2 = b^2 + c^2 - 2*b*c*cos(alpha)
         // cosine 
-        double angle = findAngle(destinationProjected, point2Projected, point1Projected);
+        double angle = 1;
+        try{
+            angle = findAngle(destinationProjected, point2Projected, point1Projected);
+        }catch(Exception ex){
+                LOGGER.log(Level.SEVERE, 
+                 String.format("{0}.Input: p1, p2, dest ({1}, {2}, {3}), projected ({4}, {5}, {6})\n"
+                      + "; target point to des {7}",
+                  ex.getMessage(), Arrays.toString(point1), Arrays.toString(point2), Arrays.toString(destination),
+                  Arrays.toString(point1Projected), Arrays.toString(point2Projected), Arrays.toString(destinationProjected),
+                  distToDestination));
+        }
+        // destination lies on the line between p1 and p2
+        if(Math.abs(angle -1) < 0.0001){
+            return distToDestination;
+        }
         double p1ToDestLen = getDistance(destinationProjected, point1Projected);
         
         // equation coefficients
         double b = -2*p1ToDestLen*angle;
         double c = distToDestination*distToDestination - p1ToDestLen*p1ToDestLen;
         // 
-        double solution = solve(b,c);
-
+        double solution = 0;
+        try{
+            solution = solve(b,c);
+        }catch(Exception ex){
+              LOGGER.log(Level.SEVERE, 
+                  String.format("{0}.Input: p1, p2, dest ({1}, {2}, {3}), projected ({4}, {5}, {6})\n"
+                      + "; target point to des {7}, p1 to dest {8}; cos(alpha) {9}; b {10}, c {11}",
+                  ex.getMessage(), Arrays.toString(point1), Arrays.toString(point2), Arrays.toString(destination),
+                  Arrays.toString(point1Projected), Arrays.toString(point2Projected), Arrays.toString(destinationProjected),
+                  distToDestination, p1ToDestLen, angle, b, c ));
+              
+        }
         return solution;
     }
     
@@ -115,5 +147,13 @@ public class Proj4jDistanceProvider implements DistanceProvider{
         double desc = Math.sqrt(1 - 4*b*c);
         double sol = (-b + desc)/(2);
         return sol;
-     }
+    }
+    
+    private boolean tooClose(double dist){
+        return dist < minDist;
+    }
+    
+    private boolean tooClose(double[] point1, double[] point2){
+        return tooClose(getDistance(point1, point2));
+    }
 }

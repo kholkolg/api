@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.service.api.model;
+package com.service.api.bestRoute;
 
+import com.service.api.model.Route;
+import com.service.api.model.Step;
 import com.service.api.model.distance.DistanceProvider;
 
 import java.util.List;

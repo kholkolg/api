@@ -5,11 +5,12 @@
  */
 package com.service.api;
 
+import com.service.api.bestRoute.RequestProcessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.api.model.distance.DistanceProvider;
 import com.service.api.model.distance.Proj4jDistanceProvider;
-import com.service.api.model.Car;
+import com.service.api.bestRoute.Car;
 import com.service.api.rest.Request;
 import com.service.api.rest.GoodResponse;
 import com.service.api.model.Route;

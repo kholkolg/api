@@ -5,6 +5,7 @@
  */
 package com.service.api.model;
 
+import com.service.api.bestRoute.Car;
 import com.service.api.rest.Request;
 import com.service.api.model.distance.DistanceProvider;
 import com.service.api.model.distance.Proj4jDistanceProvider;
