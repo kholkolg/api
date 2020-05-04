@@ -13,10 +13,12 @@ import com.service.api.db.MockRepositoryImpl;
 import com.service.api.model.distance.Proj4jDistanceProvider;
 import com.service.api.rest.FailedResponse;
 import com.service.api.rest.Request;
+import com.service.api.rest.RequestValidator;
 import com.service.api.rest.Response;
 import com.service.api.routing.OSMRouteProvider;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +39,8 @@ public class MainController {
     private final RequestProcessor processor = new RequestProcessor(
         new Proj4jDistanceProvider(), new OSMRouteProvider(""), 5);
     
+    private final RequestValidator rv = new RequestValidator();
+    
     //Database
     private final AtomicLong idGenerator = new AtomicLong(0L);
     
@@ -53,9 +57,18 @@ public class MainController {
             return new FailedResponse("Anauthorized request.");
         }
         requests.save(idGenerator.getAndIncrement(), request);
-        Response response = processor.processRequest(request);
-        LOGGER.info(response.toString());
-        responses.save(request.getId(), response);
+        Response response;
+        if(!rv.isValid(request)){
+            return new FailedResponse("Bad request.");
+        }
+        try{
+            response = processor.processRequest(request);
+            LOGGER.info(response.toString());
+            responses.save(request.getId(), response);
+        }catch(Exception ex){
+            LOGGER.severe(ex.getMessage());
+            return new FailedResponse("Request processing error. "+ex.getMessage());
+        }
         return response;
     }
         
