@@ -59,8 +59,9 @@ public class MainController {
         
         //save request to db
         requests.save(idGenerator.getAndIncrement(), request);
-        //authorization
+        //db, change 0 to smth else to throw UserNotFoundException
         request.setxSecret(users.getxSecret(0L));
+        //authorization
         if(request.getxSecret() == null || !request.getxSecret().equals("Mileus")){
             return new FailedResponse("Anauthorized request.");
         }

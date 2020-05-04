@@ -10,14 +10,14 @@ import java.util.List;
 /**
  * Mock repository.
  * @author Olga Kholkovskaia 
- * @param <Long> entity's id
+ * @param <N> entity's id type
  * @param <T> entity type
  */
-public interface MockRepository<Long, T> {
+public interface MockRepository<N, T> {
     
-    public void save(Long id, T entity);
+    public void save(N id, T entity);
     
-    public T findById(Long id);   
+    public T findById(N id);   
     
     public List<T> findAll();
 }

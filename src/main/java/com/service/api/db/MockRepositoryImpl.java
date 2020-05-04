@@ -15,18 +15,18 @@ import java.util.stream.Collectors;
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
 
-public class MockRepositoryImpl<Long, T> implements MockRepository<Long, T> {
+public class MockRepositoryImpl<N, T> implements MockRepository<N, T> {
     
-    private final Map<Long, T> entities = new HashMap<>();
+    private final Map<N, T> entities = new HashMap<>();
     
     
     @Override
-    public void save(Long id, T entity) {
+    public void save(N id, T entity) {
         entities.put(id, entity);
     }
 
     @Override
-    public T findById(Long id) {
+    public T findById(N id) {
         return entities.get(id);
     }
 

@@ -5,14 +5,19 @@
  */
 package com.service.api.db;
 
+import com.service.api.errorHandlers.UserNotFoundException;
+
 /**
  *
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
 
-public class UserRepository<Long, T> extends MockRepositoryImpl<Long, T> {
+public class UserRepository<N, T> extends MockRepositoryImpl<N, T> {
     
     public String getxSecret(Long id) {
+        if(id != 0){
+            throw new UserNotFoundException(id);
+        }       
         return "Mileus";
     }
 }
