@@ -34,9 +34,8 @@ public class RequestDeserializer extends JsonDeserializer<Request>  {
         JsonNode rootNode;
         try {
             rootNode = jp.getCodec().readTree(jp);
-            final String xSecret = rootNode.get("x-secret").asText();
-            final double time = rootNode.get("time").asDouble();
 
+            final double time = rootNode.get("time").asDouble();
             final JsonNode originNode = rootNode.get("origin");
             final JsonNode destinationNode = rootNode.get("destination");
 
@@ -45,15 +44,15 @@ public class RequestDeserializer extends JsonDeserializer<Request>  {
             final Map<String, Double> origin = pointNode2map(originNode);
             final Map<String, Double> destination =  pointNode2map(destinationNode);
             
-            List<String> waypointNames = new LinkedList<>();
-            List<Map<String, Double>> waypoints = new LinkedList<>();     
+            final List<String> waypointNames = new LinkedList<>();
+            final List<Map<String, Double>> waypoints = new LinkedList<>();     
             if (waypointNodes.isArray()) {
                 for (final JsonNode wpNode : waypointNodes) {
-                    Map<String, Double> wp = pointNode2map(wpNode);
+                    final Map<String, Double> wp = pointNode2map(wpNode);
                     waypointNames.add(wpNode.get("name").asText());
                     waypoints.add(wp);
                 }
-            return new Request(time, origin, destination, waypointNames, waypoints, xSecret);
+            return new Request(time, origin, destination, waypointNames, waypoints);
             }
         } catch (Exception ex) {
             LOGGER.severe(ex.getMessage());

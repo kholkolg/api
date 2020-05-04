@@ -10,15 +10,17 @@ package com.service.api;
 import com.service.api.bestRoute.RequestProcessor;
 import com.service.api.db.MockRepository;
 import com.service.api.db.MockRepositoryImpl;
+import com.service.api.db.UserRepository;
 import com.service.api.model.distance.Proj4jDistanceProvider;
 import com.service.api.rest.FailedResponse;
 import com.service.api.rest.Request;
 import com.service.api.rest.RequestValidator;
 import com.service.api.rest.Response;
 import com.service.api.routing.OSMRouteProvider;
+import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,20 +50,26 @@ public class MainController {
     
     private final MockRepository<Long, Response> responses = new MockRepositoryImpl<>();
     
+    private final UserRepository<Long, String> users = new UserRepository<>();
+    
 
 	@PostMapping("/api")
 	public Response newRequest(@RequestBody Request request){
         LOGGER.info(request.toString());
-   
+        
+        //save request to db
+        requests.save(idGenerator.getAndIncrement(), request);
+        //authorization
+        request.setxSecret(users.getxSecret(0L));
         if(request.getxSecret() == null || !request.getxSecret().equals("Mileus")){
             return new FailedResponse("Anauthorized request.");
         }
-        requests.save(idGenerator.getAndIncrement(), request);
-        
-        Response response;
+        //input validation
         if(!rv.isValid(request)){
             return new FailedResponse("Bad request.");
         }
+        
+        Response response;
         try{
             response = processor.processRequest(request);
             LOGGER.info(response.toString());

@@ -29,7 +29,7 @@ public class Request implements Serializable {
    
     private final double time;
     
-    private final String xSecret;
+    private  String xSecret;
     
     private final Map<String, Double> origin;
     
@@ -40,14 +40,13 @@ public class Request implements Serializable {
     private final List<Map<String, Double>> waypoints;
 
     public Request(double time, Map<String, Double> origin, Map<String, Double> destination, 
-         List<String> waypointNames, List<Map<String, Double>> waypoints, String xSecret) {
+         List<String> waypointNames, List<Map<String, Double>> waypoints) {
         this.time = time;
         this.origin = origin;
         this.destination = destination;
         this.waypoints = waypoints;
         this.waypointNames = waypointNames;
-        this.xSecret = xSecret;
-    }
+     }
           
 
     @Override
@@ -73,6 +72,10 @@ public class Request implements Serializable {
     
     public String getxSecret() {
         return xSecret;
+    }
+
+    public void setxSecret(String xSecret) {
+        this.xSecret = xSecret;
     }
       
     private String pointToString(Map<String, Double> point){

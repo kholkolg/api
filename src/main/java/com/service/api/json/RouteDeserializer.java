@@ -49,7 +49,7 @@ public class RouteDeserializer extends JsonDeserializer<Route> {
                     
                     final JsonNode stepNodes = legNode.get("steps");
                     
-                    List<Step> legSteps = Arrays.asList(mapper.convertValue(stepNodes, Step[].class));
+                    final List<Step> legSteps = Arrays.asList(mapper.convertValue(stepNodes, Step[].class));
                     
                     steps.addAll(legSteps);
                 }
