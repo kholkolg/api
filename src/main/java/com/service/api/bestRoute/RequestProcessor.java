@@ -27,13 +27,11 @@ public class RequestProcessor {
     
         private final DistanceProvider dp;
         private final RouteProvider rp ;
-        private final RequestValidator rv;
         private final double epsilon;
     
     public RequestProcessor(DistanceProvider dp, RouteProvider rp, double epsilon){
         this.dp = (dp == null) ? new Proj4jDistanceProvider() : dp;
         this.rp = (rp == null) ?  new FIlERouteProvider("") : rp;
-        this.rv = new RequestValidator();
         this.epsilon = epsilon;
     }
     

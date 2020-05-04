@@ -57,6 +57,7 @@ public class MainController {
             return new FailedResponse("Anauthorized request.");
         }
         requests.save(idGenerator.getAndIncrement(), request);
+        
         Response response;
         if(!rv.isValid(request)){
             return new FailedResponse("Bad request.");

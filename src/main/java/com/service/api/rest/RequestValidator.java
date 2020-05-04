@@ -37,7 +37,7 @@ public class RequestValidator {
         if(request.getOrigin() == null || request.getOrigin().length != 2){
             return false;
         }
-        if(!checkCoordinates(request.getOrigin()) || !checkCoordinates(request.getDestination())){
+        if(!areCoordinatesValid(request.getOrigin()) || !areCoordinatesValid(request.getDestination())){
             return false;
         }      
         List<Map<String, Double>> wps = request.getWaypoints();
@@ -45,7 +45,7 @@ public class RequestValidator {
             return false;
         }
         for(Map<String, Double> wp :wps){
-            if(!checkCoordinates(wp.get("lon"), wp.get("lat"))){
+            if(!areCoordinatesValid(wp.get("lon"), wp.get("lat"))){
                 return false;
             }
         }
@@ -53,13 +53,13 @@ public class RequestValidator {
         
     }
    
-     private boolean checkCoordinates(double lon, double lat){
+     private boolean areCoordinatesValid(double lon, double lat){
         return !(lon < longitudeLimits[0] || lon > longitudeLimits[1] ||
             lat < latitudeLimits[0] || lat > latitudeLimits[1]);
     
     }
-    private boolean checkCoordinates(double[] coordinates){
-        return checkCoordinates( coordinates[0],  coordinates[0]);
+    private boolean areCoordinatesValid(double[] coordinates){
+        return areCoordinatesValid( coordinates[0],  coordinates[1]);
     }
     
 }
