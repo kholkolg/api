@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.service.api.rest.Request;
+import com.service.api.rest.request.BestRouteRequest;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,17 +19,17 @@ import java.util.logging.Logger;
 
 
 /**
- * Deserializer for Request.
+ * Deserializer for BestRouteRequest.
  * All exceptions are handled in BadRequestHandler.
  * 
  * @author Olga Kholkovskaia 
  */
 
-public class RequestDeserializer extends JsonDeserializer<Request>  {
+public class RequestDeserializer extends JsonDeserializer<BestRouteRequest>  {
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
  
     @Override
-    public Request deserialize(JsonParser jp, DeserializationContext ctxt)   {
+    public BestRouteRequest deserialize(JsonParser jp, DeserializationContext ctxt)   {
         
         JsonNode rootNode;
         try {
@@ -52,7 +52,7 @@ public class RequestDeserializer extends JsonDeserializer<Request>  {
                     waypointNames.add(wpNode.get("name").asText());
                     waypoints.add(wp);
                 }
-            return new Request(time, origin, destination, waypointNames, waypoints);
+            return new BestRouteRequest(time, origin, destination, waypointNames, waypoints);
             }
         } catch (Exception ex) {
             LOGGER.severe(ex.getMessage());

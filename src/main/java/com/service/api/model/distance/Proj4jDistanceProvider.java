@@ -115,7 +115,7 @@ public class Proj4jDistanceProvider implements DistanceProvider{
         // equation coefficients
         double b = -2*p1ToDestLen*angle;
         double c = distToDestination*distToDestination - p1ToDestLen*p1ToDestLen;
-        // 
+        // try to find distance from the start to the target point
         double solution = 0;
         try{
             solution = solve(b,c);
@@ -132,7 +132,7 @@ public class Proj4jDistanceProvider implements DistanceProvider{
     }
     
     private double findAngle(double[] point1, double[] point2, double[] commonPoint){
-        
+        //TODO some vector library
         double[] vec1 = new double[]{point1[0] - commonPoint[0], point1[1] - commonPoint[1]};
         double[] vec2 = new double[]{point2[0] - commonPoint[0], point2[1] - commonPoint[1]};
         double vec1Norm = getDistance(point1, commonPoint);

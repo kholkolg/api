@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia
  */
 
 public class MockRepositoryImpl<N, T> implements MockRepository<N, T> {

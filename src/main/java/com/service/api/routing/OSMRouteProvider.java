@@ -8,7 +8,7 @@ package com.service.api.routing;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.api.rest.Request;
+import com.service.api.rest.request.BestRouteRequest;
 import com.service.api.model.Route;
 
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class OSMRouteProvider implements RouteProvider {
      * @return routes returned by OSM
      */
     @Override
-    public List<Route> getRoutes(Request request){
+    public List<Route> getRoutes(BestRouteRequest request){
         List<Route> routes = new ArrayList<>();
          Map<String, String> urlsMap = request.getOSMRequestUrls(url, osmParams);
         for(Map.Entry<String,String> e : urlsMap.entrySet()){

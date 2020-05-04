@@ -5,7 +5,7 @@
  */
 package com.service.api.routing;
 
-import com.service.api.rest.Request;
+import com.service.api.rest.request.BestRouteRequest;
 import com.service.api.model.Route;
 import java.util.List;
 
@@ -16,5 +16,5 @@ import java.util.List;
  */
 public interface RouteProvider {
     
-     public List<Route> getRoutes(Request request);
+     public List<Route> getRoutes(BestRouteRequest request);
 }

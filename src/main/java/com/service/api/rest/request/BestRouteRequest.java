@@ -1,4 +1,4 @@
-package com.service.api.rest;
+package com.service.api.rest.request;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -8,11 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *
@@ -22,7 +17,7 @@ import java.util.Map;
 //@Data
 //@Entity
 @JsonDeserialize(using = RequestDeserializer.class)
-public class Request implements Serializable {
+public class BestRouteRequest implements Request,Serializable {
 //
 ////    @EmbeddedId
     private Long id;
@@ -39,8 +34,9 @@ public class Request implements Serializable {
     
     private final List<Map<String, Double>> waypoints;
 
-    public Request(double time, Map<String, Double> origin, Map<String, Double> destination, 
+    public BestRouteRequest(double time, Map<String, Double> origin, Map<String, Double> destination, 
          List<String> waypointNames, List<Map<String, Double>> waypoints) {
+        
         this.time = time;
         this.origin = origin;
         this.destination = destination;
@@ -83,7 +79,7 @@ public class Request implements Serializable {
     }
     
     /**
-     * Name-to-url map for requests.
+     *  Maps waypoint names to urls for route query.
      * @param prefix   
      * @param postfix   
      * @return
@@ -105,13 +101,16 @@ public class Request implements Serializable {
     }
 
     /**
-     * Destination coordinates (lon, lat) as doubles.
+     * Destination coordinates (lon, lat)
      * @return
      */
     public double[] getDestination() {
         return new double[]{destination.get("lon"), destination.get("lat")};
     }
-  
+   /**
+    * Origin coordinates (lon, lat)
+    * @return 
+    */
     public double[] getOrigin() {
         return new double[]{origin.get("lon"), origin.get("lat")};
     }

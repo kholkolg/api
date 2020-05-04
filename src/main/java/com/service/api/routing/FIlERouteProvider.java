@@ -8,7 +8,7 @@ package com.service.api.routing;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.api.rest.Request;
+import com.service.api.rest.request.BestRouteRequest;
 import com.service.api.model.Route;
 import com.service.api.model.Step;
 import java.io.BufferedReader;
@@ -38,13 +38,13 @@ public class FIlERouteProvider implements RouteProvider {
        }
    }
     /**
-     * Request to routes.
+     * BestRouteRequest to routes.
      * 
      * @param request .
      * @return
      */
    @Override
-    public List<Route> getRoutes(Request request){
+    public List<Route> getRoutes(BestRouteRequest request){
        
         List<Route> routes = new ArrayList<>();
         Route route = null; 

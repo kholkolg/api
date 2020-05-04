@@ -8,11 +8,8 @@ package com.service.api.bestRoute;
 import com.service.api.model.Route;
 import com.service.api.model.Step;
 import com.service.api.model.distance.DistanceProvider;
-import java.util.Arrays;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  *
@@ -21,7 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 public class Car {
         
-    private DistanceProvider dp;
+    private final DistanceProvider dp;
        
     private final String routeName;
     

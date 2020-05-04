@@ -16,9 +16,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @JsonDeserialize(using = StepDeserializer.class)
 public class Step {
-
+    //duration in seconds
     private final double duration;
-    
+    //step length in meters
     private final double distance;
     
     private final double[][] waypoints;

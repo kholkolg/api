@@ -12,10 +12,10 @@ import com.service.api.db.MockRepository;
 import com.service.api.db.MockRepositoryImpl;
 import com.service.api.db.UserRepository;
 import com.service.api.model.distance.Proj4jDistanceProvider;
-import com.service.api.rest.FailedResponse;
-import com.service.api.rest.Request;
-import com.service.api.rest.RequestValidator;
-import com.service.api.rest.Response;
+import com.service.api.rest.response.FailedResponse;
+import com.service.api.rest.request.BestRouteRequest;
+import com.service.api.rest.request.BestRouteRequestValidator;
+import com.service.api.rest.response.Response;
 import com.service.api.routing.OSMRouteProvider;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -39,20 +39,20 @@ public class MainController {
     private final RequestProcessor processor = new RequestProcessor(
         new Proj4jDistanceProvider(), new OSMRouteProvider(""), 5);
     
-    private final RequestValidator rv = new RequestValidator();
+    private final BestRouteRequestValidator rv = new BestRouteRequestValidator();
     
     //Database
     private final AtomicLong idGenerator = new AtomicLong(0L);
     
-    private final MockRepository<Long, Request> requests = new MockRepositoryImpl<>();
+    private final MockRepository<Long, BestRouteRequest> requests = new MockRepositoryImpl<>();
     
     private final MockRepository<Long, Response> responses = new MockRepositoryImpl<>();
     
     private final UserRepository<Long, String> users = new UserRepository<>();
     
 
-	@PostMapping("/api")
-	public Response newRequest(@RequestBody Request request){
+	@PostMapping("/best-route")
+	public Response newRequest(@RequestBody BestRouteRequest request){
         LOGGER.info(request.toString());
         
         //save request to db
@@ -81,7 +81,7 @@ public class MainController {
     }
         
     @GetMapping("/api/requests")
-    public List<Request>  allRequests(){
+    public List<BestRouteRequest>  allRequests(){
         return requests.findAll();
     }
     

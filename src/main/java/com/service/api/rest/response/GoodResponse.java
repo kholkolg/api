@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.service.api.rest;
+package com.service.api.rest.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -48,8 +48,7 @@ public class GoodResponse implements Response, Serializable {
    public boolean isComplete(){
         return !(winnerName == null || winnerName.equals("") || delays.isEmpty());
    }
-   
-   
+      
    
     @Override
     public String toString() {

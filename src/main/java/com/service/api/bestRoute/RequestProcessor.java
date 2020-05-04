@@ -9,11 +9,11 @@ import com.service.api.routing.FIlERouteProvider;
 import com.service.api.routing.RouteProvider;
 import com.service.api.model.distance.DistanceProvider;
 import com.service.api.model.distance.Proj4jDistanceProvider;
-import com.service.api.rest.Request;
-import com.service.api.rest.GoodResponse;
+import com.service.api.rest.request.BestRouteRequest;
+import com.service.api.rest.response.GoodResponse;
 import com.service.api.model.Route;
-import com.service.api.rest.FailedResponse;
-import com.service.api.rest.Response;
+import com.service.api.rest.response.FailedResponse;
+import com.service.api.rest.response.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class RequestProcessor {
     }
     
     
-    public Response processRequest(Request request){
+    public Response processRequest(BestRouteRequest request){
         // find routes
         List<Route> routes = rp.getRoutes(request);
         if(routes == null || routes.isEmpty()){

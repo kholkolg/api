@@ -43,7 +43,10 @@ public class Route {
     public List<Step> getSteps() {
         return steps;
     }
-       
+     /**
+      * Name of the waypoint from the request.
+      * @return 
+      */
     public String getName() {
         return name;
     }
@@ -51,11 +54,17 @@ public class Route {
     public void setName(String name) {
         this.name = name;
     }
-    
+    /**
+     * Last waypoint coordinates.
+     * @return 
+     */
     public double[] getDestination(){
         return this.steps.get(this.steps.size()-1).getEndPoint();
     }
-    
+    /**
+     * First waypoint coordinates.
+     * @return 
+     */
     public double[] getOrigin(){
         return this.steps.get(0).getEndPoint();
     }

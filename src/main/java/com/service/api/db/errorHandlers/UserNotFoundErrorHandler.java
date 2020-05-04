@@ -5,8 +5,8 @@
  */
 package com.service.api.db.errorHandlers;
 
-import com.service.api.rest.FailedResponse;
-import com.service.api.rest.Response;
+import com.service.api.rest.response.FailedResponse;
+import com.service.api.rest.response.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

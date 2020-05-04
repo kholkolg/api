@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.service.api.rest;
+package com.service.api.rest.request;
 
 
+import com.service.api.rest.request.BestRouteRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ import java.util.Map;
  * @author Olga Kholkovskaia 
  * 
  */
-public class RequestValidator {
+public class BestRouteRequestValidator {
        
     private final static double[] longitudeLimits = new double[]{10, 20};
     
@@ -30,7 +31,7 @@ public class RequestValidator {
       * @param request
       * @return 
       */
-    public boolean isValid(Request request){
+    public boolean isValid(BestRouteRequest request){
         if(request == null){
             return false;
         }
