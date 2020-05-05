@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @author Olga Kholkovskaia 
  * 
  */
-@Component
+@Component("bestRouteValidator")
 public class BestRouteRequestValidator {
        
     private final double[] longitudeLimits = new double[]{10, 20};

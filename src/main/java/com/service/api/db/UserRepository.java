@@ -6,12 +6,14 @@
 package com.service.api.db;
 
 import com.service.api.db.errorHandlers.UserNotFoundException;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Olga Kholkovskaia 
  */
-
+@Service("userRepository")
 public class UserRepository<N, T> extends MockRepositoryImpl<N, T> {
     
     public String getxSecret(Long id){

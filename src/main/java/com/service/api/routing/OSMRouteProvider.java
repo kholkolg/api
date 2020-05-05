@@ -36,21 +36,13 @@ import org.springframework.stereotype.Component;
  *
  * @author Olga Kholkovskaia 
  */
-@Component
+@Component("osmRouteProvider")
 public class OSMRouteProvider implements RouteProvider {
     private final  String url =  "http://router.project-osrm.org/route/v1/driving/";
     
     private final String osmParams = "geometries=geojson&overview=false&steps=true";
     private final HttpClient httpClient = HttpClients.createDefault();
 
-//    public OSMRouteProvider(){
-//        if(url.equals("")){
-//            this.url =  "http://router.project-osrm.org/route/v1/driving/";
-//        }else{
-//            this.url = url;
-//        }
-//        
-//    }
    
     /**
      * Sends request to OSM routing service..

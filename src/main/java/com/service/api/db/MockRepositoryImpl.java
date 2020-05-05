@@ -9,12 +9,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Olga Kholkovskaia
  */
-
+@Service("mockRepository")
+@Scope("prototype")
 public class MockRepositoryImpl<N, T> implements MockRepository<N, T> {
     
     private final Map<N, T> entities = new HashMap<>();

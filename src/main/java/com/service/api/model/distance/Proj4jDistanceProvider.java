@@ -18,8 +18,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Olga Kholkovskaia
  */
-//@Service("Proj4jDistanceProvider")
-@Component
+@Component("proj4jDistanceProvider")
 public class Proj4jDistanceProvider implements DistanceProvider{
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private final BasicCoordinateTransform transformToMetric;

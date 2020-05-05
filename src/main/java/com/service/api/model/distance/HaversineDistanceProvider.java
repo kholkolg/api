@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Olga Kholkovskaia
  */
-//@Service("haversineDistanceProvider")
-@Component
+@Component("haversineDistanceProvider")
 public class HaversineDistanceProvider implements DistanceProvider{
     final private static int R = 6371000; 
     

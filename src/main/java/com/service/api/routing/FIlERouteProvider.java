@@ -27,17 +27,11 @@ import org.springframework.stereotype.Component;
  *
  * @author Olga Kholkovskaia 
  */
-@Component
+@Component("fileRouteProvider")
 public class FIlERouteProvider implements RouteProvider {
    final String dir= "/home/olga/NetBeansProjects/api/data/";
     
-//   public FIlERouteProvider(String dir){
-//       if(dir.equals("")){
-//           this.dir = "/home/olga/NetBeansProjects/api/data/";
-//       }else{
-//           this.dir = dir;
-//       }
-//   }
+
     /**
      * BestRouteRequest to routes.
      * 

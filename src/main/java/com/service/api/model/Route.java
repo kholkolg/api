@@ -9,7 +9,6 @@ package com.service.api.model;
 import com.service.api.json.RouteDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.List;
-import org.springframework.stereotype.Component;
 
 
 /**

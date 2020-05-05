@@ -14,12 +14,10 @@ import java.util.Map;
  * 
  * @author Olga Kholkovskaia 
  */
-//@Data
-//@Entity
+
 @JsonDeserialize(using = RequestDeserializer.class)
 public class BestRouteRequest implements Request,Serializable {
-//
-////    @EmbeddedId
+
     private Long id;
    
     private final double time;

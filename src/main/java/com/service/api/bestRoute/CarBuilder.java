@@ -19,8 +19,7 @@ public class CarBuilder {
     
     @Autowired
     private ApplicationContext context;
-    
-    
+ 
     public Car getCar(Route route){
         Car car = context.getBean(Car.class);
         car.setRoute(route);

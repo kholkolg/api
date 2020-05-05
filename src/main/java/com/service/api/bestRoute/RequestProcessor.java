@@ -10,29 +10,28 @@ import com.service.api.rest.response.GoodResponse;
 import com.service.api.model.Route;
 import com.service.api.rest.response.FailedResponse;
 import com.service.api.rest.response.Response;
-import com.service.api.routing.OSMRouteProvider;
+import com.service.api.routing.RouteProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Olga Kholkovskaia
  */
-@Component
+@Component("bestRouteProcessor")
 public class RequestProcessor {
     
     @Autowired
-    private OSMRouteProvider rp ;
+    @Qualifier("osmRouteProvider")
+    private RouteProvider routeProvider ;
 
     @Autowired
-    private CarBuilder cb;
-//    private ApplicationContext applicationContext;
+    private CarBuilder carBuilder;
     
     private double epsilon = 5;
-
 
     public void setEpsilon(double epsilon) {
         this.epsilon = epsilon;
@@ -41,7 +40,7 @@ public class RequestProcessor {
     
     public Response processRequest(BestRouteRequest request){
         // find routes
-        List<Route> routes = rp.getRoutes(request);
+        List<Route> routes = routeProvider.getRoutes(request);
         if(routes == null || routes.isEmpty()){
             return new FailedResponse("Routes not found");
         }
@@ -51,7 +50,7 @@ public class RequestProcessor {
         double bestDist = Double.MAX_VALUE;
         String bestRoute = "";
         for(Route route : routes){
-            Car car = cb.getCar(route);
+            Car car = carBuilder.getCar(route);
             cars.add(car);
             double dist = car.movefromStart(request.getTime());
             if(dist < bestDist){

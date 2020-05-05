@@ -8,7 +8,6 @@ package com.service.api;
 
 
 import com.service.api.bestRoute.RequestProcessor;
-import com.service.api.db.MockRepository;
 import com.service.api.db.MockRepositoryImpl;
 import com.service.api.db.UserRepository;
 import com.service.api.rest.response.FailedResponse;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,21 +36,27 @@ public class MainController {
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     
     @Autowired
-    private RequestProcessor processor;
-//        = new RequestProcessor(
-//        new Proj4jDistanceProvider(), new OSMRouteProvider(), 5);
-//    
+    @Qualifier("bestRouteProcessor")
+    private RequestProcessor bestRouteProcessor;
+ 
     @Autowired
-    private BestRouteRequestValidator rv;
+    @Qualifier("bestRouteValidator")
+    private BestRouteRequestValidator bestRouteValidator;
     
     //Database
     private final AtomicLong idGenerator = new AtomicLong(0L);
     
-    private final MockRepository<Long, BestRouteRequest> requests = new MockRepositoryImpl<>();
+    @Autowired
+    @Qualifier("mockRepository")
+    private MockRepositoryImpl<Long, BestRouteRequest> requests;
     
-    private final MockRepository<Long, Response> responses = new MockRepositoryImpl<>();
+    @Autowired
+    @Qualifier("mockRepository")
+    private MockRepositoryImpl<Long, Response> responses;
     
-    private final UserRepository<Long, String> users = new UserRepository<>();
+    @Autowired
+    @Qualifier("userRepository")
+    private UserRepository<Long, String> users;
     
 
 	@PostMapping("/best-route")
@@ -66,13 +72,13 @@ public class MainController {
             return new FailedResponse("Anauthorized request.");
         }
         //input validation
-        if(!rv.isValid(request)){
+        if(!bestRouteValidator.isValid(request)){
             return new FailedResponse("Bad request.");
         }
         
         Response response;
         try{
-            response = processor.processRequest(request);
+            response = bestRouteProcessor.processRequest(request);
             LOGGER.info(response.toString());
             responses.save(request.getId(), response);
         }catch(Exception ex){

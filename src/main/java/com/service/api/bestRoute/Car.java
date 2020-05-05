@@ -7,10 +7,11 @@ package com.service.api.bestRoute;
 
 import com.service.api.model.Route;
 import com.service.api.model.Step;
-import com.service.api.model.distance.Proj4jDistanceProvider;
+import com.service.api.model.distance.DistanceProvider;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,8 @@ import org.springframework.stereotype.Service;
 public class Car {
     
     @Autowired
-    private Proj4jDistanceProvider dp;
+    @Qualifier("proj4jDistanceProvider")
+    private DistanceProvider dp;
        
     private  String routeName;
     
@@ -40,7 +42,7 @@ public class Car {
     private int currentWpIndex;
     
     
-    public void setRoute(Route route){
+    protected void setRoute(Route route){
          this.routeName = route.getName();
         
         this.destination = route.getDestination();
