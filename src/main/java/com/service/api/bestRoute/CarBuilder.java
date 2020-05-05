@@ -8,6 +8,7 @@ package com.service.api.bestRoute;
 import com.service.api.model.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
  * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
  */
 @Component
+@Lazy(true)
 public class CarBuilder {
     
     @Autowired

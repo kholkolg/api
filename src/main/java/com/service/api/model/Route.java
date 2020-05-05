@@ -50,6 +50,14 @@ public class Route {
         return name;
     }
 
+    public double getDuration() {
+        return duration;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

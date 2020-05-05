@@ -26,7 +26,11 @@ public class Car {
     @Autowired
     @Qualifier("proj4jDistanceProvider")
     private DistanceProvider dp;
-       
+    
+    private double duration;
+    
+    private double distance;
+    
     private  String routeName;
     
     private List<Step> steps;    
@@ -46,6 +50,10 @@ public class Car {
          this.routeName = route.getName();
         
         this.destination = route.getDestination();
+        
+        this.duration = route.getDuration();
+        
+        this.distance = route.getDistance();
         
         this.currentStepIndex = 0;
         
@@ -71,6 +79,12 @@ public class Car {
     public double movefromStart(double timeToTravel){
         
         reset();
+        if(timeToTravel >= duration){
+            currentStepIndex = steps.size()-1;
+            currentWpIndex = steps.get(currentStepIndex).getWaypoints().length-1;
+            currentPosition = destination;
+            return 0.0;
+        }
         double routeTime = 0;
         //find the last step
         routeTime = findStep(routeTime, timeToTravel);
@@ -99,6 +113,7 @@ public class Car {
      * almost equal to target distance of the winner.
      * 
      * @param targetDistance
+     * @param epsilon
      * @return 
      */
     public double computeDelay(double targetDistance, double epsilon){
@@ -162,7 +177,9 @@ public class Car {
         double[][] waypoints = step.getWaypoints();
         double timeLeft = duration - routeTime;
         double distFromLastWp = timeLeft * step.getSpeedMs();
-        double[] endPoint = dp.getPoint(waypoints[currentWpIndex], waypoints[currentStepIndex+1], distFromLastWp);
+        double[] p1= waypoints[currentWpIndex];
+        double[] p2 = waypoints[currentWpIndex+1];
+        double[] endPoint = dp.getPoint(p1, p2, distFromLastWp);
         return endPoint;
     }
        

@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Component;
  * @author Olga Kholkovskaia 
  */
 @Component("fileRouteProvider")
+@Lazy(true)
 public class FIlERouteProvider implements RouteProvider {
    final String dir= "/home/olga/NetBeansProjects/api/data/";
     

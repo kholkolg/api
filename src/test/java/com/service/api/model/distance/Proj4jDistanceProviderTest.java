@@ -5,7 +5,6 @@
  */
 package com.service.api.model.distance;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.api.routing.FIlERouteProvider;
@@ -19,21 +18,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia 
  */
 public class Proj4jDistanceProviderTest {
+    final String dir= "/home/olga/NetBeansProjects/api/data/";
+    
+    // error in meters
+    public static final double EPS1 = 1;//generated data
+    
+    public int EPS2 = 5;//real data
+    
+    Proj4jDistanceProvider instance = new Proj4jDistanceProvider();
+    
+    List<Map<String, Double>> data1 = readPoints("test_point1.json");
+    List<Map<String, Double>> data2 = readPoints("test_point2.json");
     
     public Proj4jDistanceProviderTest() {
     }
-    
-    final String dir= "/home/olga/NetBeansProjects/api/data/";
-    
+        
     public List<Map<String, Double>> readPoints(String filename){
         StringBuilder sb = new StringBuilder();
         List<Map<String, Double>> data = new ArrayList<>();
@@ -60,49 +67,45 @@ public class Proj4jDistanceProviderTest {
     
     
     /**
-     * Distance between two points in wsg.
+     * Distance between two points.
      *  
      */
     @Test
     public void testGetDistanceMeters1() {
         System.out.println("getDistanceMeters: projected data");
         boolean all_passed = true;
-        Proj4jDistanceProvider instance = new Proj4jDistanceProvider();
-        List<Map<String, Double>> data = readPoints("test_point1.json");
         
         // same point 
-        double dist = instance.getDistanceMeters(new double[]{data.get(0).get("x1"), data.get(0).get("y1")}, 
-            new double[]{data.get(0).get("x1"), data.get(0).get("y1")});
-        if(dist != 0){
-             System.out.println("Failed case: same point " +dist+" != "+0);
+        double result = instance.getDistanceMeters(new double[]{data1.get(0).get("x1"), data1.get(0).get("y1")}, 
+            new double[]{data1.get(0).get("x1"), data1.get(0).get("y1")});
+        if(result != 0){
+             System.out.println("Failed case: same point " +result+" != "+0);
              all_passed = false;
         }
         //
-        for(Map<String, Double> d: data){
-                dist = instance.getDistanceMeters(new double[]{d.get("x1"), d.get("y1")}, 
+        for(Map<String, Double> d: data1){
+                result = instance.getDistanceMeters(new double[]{d.get("x1"), d.get("y1")}, 
                 new double[]{d.get("x2"), d.get("y2")});
                 double exp_result = d.get("distance");
-                if(Math.abs(dist - exp_result) > 1){
-                    System.out.println("Failed case " +dist+" != "+exp_result+"; "+d.toString());
+                if(Math.abs(result - exp_result) > EPS1){
+                    System.out.println("Failed case " +result+" != "+exp_result+"; "+d.toString());
                     all_passed = false;
                 }
        }
         assertTrue(all_passed);
     }
-    
+
     @Test
     public void testGetDistanceMeters2() {
         System.out.println("getDistanceMeters: real data");
         boolean all_passed = true;
-        Proj4jDistanceProvider instance = new Proj4jDistanceProvider();
-        List<Map<String, Double>> data = readPoints("test_point2.json");
         
-        for(Map<String, Double> d: data){
-                double dist = instance.getDistanceMeters(new double[]{d.get("x1"), d.get("y1")}, 
+        for(Map<String, Double> d: data2){
+                double result = instance.getDistanceMeters(new double[]{d.get("x1"), d.get("y1")}, 
                 new double[]{d.get("x2"), d.get("y2")});
                 double exp_result = d.get("distance");
-                if(Math.abs(dist - exp_result) > 5){
-                    System.out.println("Failed case " +dist+" != "+exp_result+"; "+d.toString());
+                if(Math.abs(result - exp_result) > EPS2 ){
+                    System.out.println("Failed case " +result+" != "+exp_result+"; "+d.toString());
                     all_passed = false;
                 }
        }
@@ -110,39 +113,123 @@ public class Proj4jDistanceProviderTest {
     }
     
 
-//    /**
-//     * Test of getPoint method, of class Proj4jDistanceProvider.
-//     */
-//    @Test
-//    public void testGetPoint() {
-//        System.out.println("getPoint");
-//        double[] origin = null;
-//        double[] destination = null;
-//        double distFromOrigin = 0.0;
-//        Proj4jDistanceProvider instance = new Proj4jDistanceProvider();
-//        double[] expResult = null;
-//        double[] result = instance.getPoint(origin, destination, distFromOrigin);
-//        assertArrayEquals(expResult, result, 0.01);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getDistanceFromPoint1 method, of class Proj4jDistanceProvider.
-//     */
-//    @Test
-//    public void testGetDistanceFromPoint1() {
-//        System.out.println("getDistanceFromPoint1");
-//        double[] point1 = null;
-//        double[] point2 = null;
-//        double[] destination = null;
-//        double distToDestination = 0.0;
-//        Proj4jDistanceProvider instance = new Proj4jDistanceProvider();
-//        double expResult = 0.0;
-//        double result = instance.getDistanceFromPoint1(point1, point2, destination, distToDestination);
-//        assertEquals(expResult, result, 0.0);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//    
+    /**
+     * Test of getPoint method, of class Proj4jDistanceProvider.
+     */
+    @Test
+    public void testGetPoint1() {
+        System.out.println("getPoint: projected, start point");
+        boolean all_passed = true;
+        
+        for(Map<String, Double> d: data1){
+            double[] p1 = new double[]{d.get("x1"), d.get("y1")};
+            double[] p2 = new double[]{d.get("x2"), d.get("y2")};
+           //1) start point
+            double[] result = instance.getPoint(p1, p2, 0);
+            double dist = instance.getDistanceMeters(result, p1);
+            if(dist > EPS1){
+                all_passed = false;
+                System.out.println("Failed case " +Arrays.toString(result)+" != "+
+                    Arrays.toString(p1)+"; "+d.toString());
+            }
+        }
+         assertTrue(all_passed);
+    }
+    
+    
+    @Test
+    public void testGetPoint2() {
+        System.out.println("getPoint: projected, end point");
+        boolean all_passed = true;
+        
+        for(Map<String, Double> d: data1){
+            double[] p1 = new double[]{d.get("x1"), d.get("y1")};
+            double[] p2 = new double[]{d.get("x2"), d.get("y2")};
+            double distance = d.get("distance");
+           //1) start point
+            double[] result = instance.getPoint(p1, p2, distance);
+            double error = instance.getDistanceMeters(result, p2);
+            if(error > EPS1){
+                all_passed = false;
+                System.out.println("Failed case " +Arrays.toString(result)+" != "+
+                    Arrays.toString(p1)+"; "+d.toString());
+            }
+        }
+         assertTrue(all_passed);
+    }
+    
+    @Test
+    public void testGetPoint3() {
+        System.out.println("getPoint: projected, middle point");
+        boolean all_passed = true;
+        
+        for(Map<String, Double> d: data1){
+            double[] p1 = new double[]{d.get("x1"), d.get("y1")};
+            double[] p2 = new double[]{d.get("x2"), d.get("y2")};
+            double distance = d.get("distance")/2;
+           //1) start point
+            double[] result = instance.getPoint(p1, p2, distance);
+            double new_distance = instance.getDistanceMeters(result, p2);
+            if(Math.abs(distance-new_distance) > EPS1 ){
+                all_passed = false;
+                System.out.println("Failed case " +Arrays.toString(result)+" != "+
+                    Arrays.toString(p1)+"; "+d.toString());
+            }
+        }
+         assertTrue(all_passed);
+    }
+    
+    @Test
+    public void testGetPoint4() {
+        System.out.println("getPoint: real");
+        boolean all_passed = true;
+        
+        for(Map<String, Double> d: data2){
+            double[] p1 = new double[]{d.get("x1"), d.get("y1")};
+            double[] p2 = new double[]{d.get("x2"), d.get("y2")};
+            double distance = d.get("distance");
+            double length = d.get("distance")*Math.random();
+
+            double[] result = instance.getPoint(p1, p2, length);
+            double distanceP1 = instance.getDistanceMeters(result, p1);
+            double distanceP2 = instance.getDistanceMeters(result, p2);
+            if(Math.abs(length - distanceP1) > EPS2 || Math.abs(distance - length - distanceP2) > EPS2  ){
+                all_passed = false;
+                System.out.println("Failed case " +Arrays.toString(result)+" != "+
+                    Arrays.toString(p1)+"; "+d.toString());
+            }
+        }
+         assertTrue(all_passed);
+    }
+    
+
+    /**
+     * Test of getDistanceFromPoint1 method, of class Proj4jDistanceProvider.
+     */
+    @Test
+    public void testGetDistanceFromPoint1() {
+        System.out.println("getPoint: real");
+        boolean all_passed = true;
+            
+        for(Map<String, Double> d: data1){
+            double[] p1 = new double[]{d.get("x1"), d.get("y1")};
+            double[] p2 = new double[]{d.get("x2"), d.get("y2")};
+            double distance = d.get("distance");
+
+            double result = instance.getDistanceFromPoint1(p1, p2, p2, 0);
+            if(Math.abs(result)  > EPS1 ){
+                all_passed = false;
+                System.out.println("Failed case " + Math.abs(result) + " != " + distance +
+                    Arrays.toString(p1)+"; "+d.toString());
+            }
+            
+            result = instance.getDistanceFromPoint1(p1, p2, p2, distance);
+            if(Math.abs(result)  > EPS1 ){
+                all_passed = false;
+                System.out.println("Failed case " + Math.abs(result) + " != " + distance +
+                    Arrays.toString(p1)+"; "+d.toString());
+            }
+        }
+         assertTrue(all_passed);
+    }
 }

@@ -27,6 +27,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 
@@ -37,6 +38,7 @@ import org.springframework.stereotype.Component;
  * @author Olga Kholkovskaia 
  */
 @Component("osmRouteProvider")
+@Lazy(true)
 public class OSMRouteProvider implements RouteProvider {
     private final  String url =  "http://router.project-osrm.org/route/v1/driving/";
     
