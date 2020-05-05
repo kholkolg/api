@@ -7,6 +7,7 @@ package com.service.api.model;
 
 import com.service.api.json.StepDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * @author Olga Kholkovskaia
  */
 @JsonDeserialize(using = StepDeserializer.class)
+//@Component
 public class Step {
     //duration in seconds
     private final double duration;

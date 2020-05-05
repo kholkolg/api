@@ -27,6 +27,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.stereotype.Component;
 
 
 
@@ -35,20 +36,21 @@ import org.apache.http.impl.client.HttpClients;
  *
  * @author Olga Kholkovskaia 
  */
+@Component
 public class OSMRouteProvider implements RouteProvider {
-    private final  String url;
+    private final  String url =  "http://router.project-osrm.org/route/v1/driving/";
     
     private final String osmParams = "geometries=geojson&overview=false&steps=true";
     private final HttpClient httpClient = HttpClients.createDefault();
 
-    public OSMRouteProvider(String url){
-        if(url.equals("")){
-            this.url =  "http://router.project-osrm.org/route/v1/driving/";
-        }else{
-            this.url = url;
-        }
-        
-    }
+//    public OSMRouteProvider(){
+//        if(url.equals("")){
+//            this.url =  "http://router.project-osrm.org/route/v1/driving/";
+//        }else{
+//            this.url = url;
+//        }
+//        
+//    }
    
     /**
      * Sends request to OSM routing service..

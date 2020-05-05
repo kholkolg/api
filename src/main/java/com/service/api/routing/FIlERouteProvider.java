@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.api.rest.request.BestRouteRequest;
 import com.service.api.model.Route;
-import com.service.api.model.Step;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,22 +20,24 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
 
 /**
  *
  * @author Olga Kholkovskaia 
  */
+@Component
 public class FIlERouteProvider implements RouteProvider {
-   final String dir;
+   final String dir= "/home/olga/NetBeansProjects/api/data/";
     
-   public FIlERouteProvider(String dir){
-       if(dir.equals("")){
-           this.dir = "/home/olga/NetBeansProjects/api/data/";
-       }else{
-           this.dir = dir;
-       }
-   }
+//   public FIlERouteProvider(String dir){
+//       if(dir.equals("")){
+//           this.dir = "/home/olga/NetBeansProjects/api/data/";
+//       }else{
+//           this.dir = dir;
+//       }
+//   }
     /**
      * BestRouteRequest to routes.
      * 

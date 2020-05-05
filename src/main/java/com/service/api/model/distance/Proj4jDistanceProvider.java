@@ -12,12 +12,14 @@ import org.osgeo.proj4j.BasicCoordinateTransform;
 import org.osgeo.proj4j.CRSFactory;
 import org.osgeo.proj4j.CoordinateReferenceSystem;
 import org.osgeo.proj4j.ProjCoordinate;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Olga Kholkovskaia
  */
 //@Service("Proj4jDistanceProvider")
+@Component
 public class Proj4jDistanceProvider implements DistanceProvider{
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private final BasicCoordinateTransform transformToMetric;

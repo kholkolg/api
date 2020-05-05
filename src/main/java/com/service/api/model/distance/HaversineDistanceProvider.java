@@ -5,13 +5,14 @@
  */
 package com.service.api.model.distance;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Olga Kholkovskaia
  */
 //@Service("haversineDistanceProvider")
+@Component
 public class HaversineDistanceProvider implements DistanceProvider{
     final private static int R = 6371000; 
     

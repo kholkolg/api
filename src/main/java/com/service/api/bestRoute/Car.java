@@ -7,39 +7,58 @@ package com.service.api.bestRoute;
 
 import com.service.api.model.Route;
 import com.service.api.model.Step;
-import com.service.api.model.distance.DistanceProvider;
+import com.service.api.model.distance.Proj4jDistanceProvider;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Olga Kholkovskaia 
  */
-
+@Service
+@Scope("prototype")
 public class Car {
-        
-    private final DistanceProvider dp;
-       
-    private final String routeName;
     
-    private final List<Step> steps;    
+    @Autowired
+    private Proj4jDistanceProvider dp;
+       
+    private  String routeName;
+    
+    private List<Step> steps;    
+    
+    private double[] currentPosition;
+    
+    private double[] destination;
+    
+    private double[] origin;
     
     private int currentStepIndex; 
     
     private int currentWpIndex;
     
-    private double[] currentPosition;
     
-    private final double[] destination;
+//    public Car(Route route){
+//        
+//        this.routeName = route.getName();
+//        
+//        this.destination = route.getDestination();
+//        
+//        this.currentStepIndex = 0;
+//        
+//        this.currentWpIndex = 0;
+//        
+//        this.origin = route.getOrigin();
+//        
+//        this.currentPosition =  route.getOrigin();
+//        
+//        this.steps = route.getSteps();
+//    }
     
-    private final double[] origin;
-    
-    
-    public Car(Route route, DistanceProvider dp){
-        
-        this.dp = dp;
-        
-        this.routeName = route.getName();
+    public void setRoute(Route route){
+         this.routeName = route.getName();
         
         this.destination = route.getDestination();
         
@@ -53,7 +72,6 @@ public class Car {
         
         this.steps = route.getSteps();
     }
-    
     
     public String getRouteName(){
         return routeName;

@@ -6,9 +6,9 @@
 package com.service.api.rest.request;
 
 
-import com.service.api.rest.request.BestRouteRequest;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -18,11 +18,12 @@ import java.util.Map;
  * @author Olga Kholkovskaia 
  * 
  */
+@Component
 public class BestRouteRequestValidator {
        
-    private final static double[] longitudeLimits = new double[]{10, 20};
+    private final double[] longitudeLimits = new double[]{10, 20};
     
-    private final static double[] latitudeLimits = new double[]{45, 55};
+    private final  double[] latitudeLimits = new double[]{45, 55};
           
      /**
       * Check request parameters.
@@ -55,12 +56,36 @@ public class BestRouteRequestValidator {
         }
         if(!wps.stream().noneMatch((wp) -> (!areCoordinatesValid(wp.get("lon"), wp.get("lat"))))) {
             return false;
+//        for(Map<String, Double> wp: wps){
+//            System.out.println(wp.entrySet());
+//            double lon = wp.get("lon");
+//            double lat = wp.get("lat");
+//            if(!areCoordinatesValid(lon, lat)){
+//                return false;
+//            }
         }
     return true;
         
     }
    
     private boolean areCoordinatesValid(double lon, double lat){
+//        double minLon = longitudeLimits[0];
+//        double maxLon = longitudeLimits[1];
+//        double minLat = latitudeLimits[0];
+//        double maxLat = latitudeLimits[1];
+//        if(lon < minLon){
+//            return false;
+//        }
+//        if(lon > maxLon){
+//            return false;
+//        }
+//        if(lat < minLat){
+//            return false;
+//        }
+//        if(lat > maxLat){
+//            return false;
+//        }
+//        return true;
         return !(lon < longitudeLimits[0] || lon > longitudeLimits[1] ||
             lat < latitudeLimits[0] || lat > latitudeLimits[1]);
     

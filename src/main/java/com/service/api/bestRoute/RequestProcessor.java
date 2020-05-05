@@ -5,33 +5,52 @@
  */
 package com.service.api.bestRoute;
 
-import com.service.api.routing.FIlERouteProvider;
-import com.service.api.routing.RouteProvider;
-import com.service.api.model.distance.DistanceProvider;
-import com.service.api.model.distance.Proj4jDistanceProvider;
 import com.service.api.rest.request.BestRouteRequest;
 import com.service.api.rest.response.GoodResponse;
 import com.service.api.model.Route;
 import com.service.api.rest.response.FailedResponse;
 import com.service.api.rest.response.Response;
+import com.service.api.routing.OSMRouteProvider;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Olga Kholkovskaia
  */
+@Component
 public class RequestProcessor {
     
-        private final DistanceProvider dp;
-        private final RouteProvider rp ;
-        private final double epsilon;
+//        private final DistanceProvider dp;
+    @Autowired
+    private OSMRouteProvider rp ;
+
+//    @Autowired
+//    private List<Car> cars;
+
+    @Autowired
+    private ApplicationContext applicationContext;
     
-    public RequestProcessor(DistanceProvider dp, RouteProvider rp, double epsilon){
-        this.dp = (dp == null) ? new Proj4jDistanceProvider() : dp;
-        this.rp = (rp == null) ?  new FIlERouteProvider("") : rp;
-        this.epsilon = epsilon;
-    }
+    private double epsilon = 5;
+
+//    @PostConstruct
+//    public void init() throws Exception {
+//        cars = new ArrayList<Car>();
+//        fooList.add(new FooImpl());
+//    }
+//    
+//    public RequestProcessor(double epsilon){
+////        this.dp = (dp == null) ? new Proj4jDistanceProvider() : dp;
+////        this.rp = (rp == null) ?  new FIlERouteProvider("") : rp;
+////        this.epsilon = epsilon;
+//    }
+
+//    public void setEpsilon(double epsilon) {
+//        this.epsilon = epsilon;
+//    }
     
     
     public Response processRequest(BestRouteRequest request){
@@ -46,8 +65,11 @@ public class RequestProcessor {
         double bestDist = Double.MAX_VALUE;
         String bestRoute = "";
         for(Route r : routes){
-            Car car = new Car(r, dp);
-            cars.add(car);
+            Car car = applicationContext.getBean(Car.class);
+             cars.add(car);
+//            Car car = cars.get(0);
+            
+            car.setRoute(r);
             double dist = car.movefromStart(request.getTime());
             if(dist < bestDist){
                 bestDist = dist;

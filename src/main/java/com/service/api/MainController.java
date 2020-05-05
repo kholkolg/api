@@ -11,15 +11,14 @@ import com.service.api.bestRoute.RequestProcessor;
 import com.service.api.db.MockRepository;
 import com.service.api.db.MockRepositoryImpl;
 import com.service.api.db.UserRepository;
-import com.service.api.model.distance.Proj4jDistanceProvider;
 import com.service.api.rest.response.FailedResponse;
 import com.service.api.rest.request.BestRouteRequest;
 import com.service.api.rest.request.BestRouteRequestValidator;
 import com.service.api.rest.response.Response;
-import com.service.api.routing.OSMRouteProvider;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,10 +35,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     
-    private final RequestProcessor processor = new RequestProcessor(
-        new Proj4jDistanceProvider(), new OSMRouteProvider(""), 5);
-    
-    private final BestRouteRequestValidator rv = new BestRouteRequestValidator();
+    @Autowired
+    private RequestProcessor processor;
+//        = new RequestProcessor(
+//        new Proj4jDistanceProvider(), new OSMRouteProvider(), 5);
+//    
+    @Autowired
+    private BestRouteRequestValidator rv;
     
     //Database
     private final AtomicLong idGenerator = new AtomicLong(0L);
