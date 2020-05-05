@@ -40,23 +40,6 @@ public class Car {
     private int currentWpIndex;
     
     
-//    public Car(Route route){
-//        
-//        this.routeName = route.getName();
-//        
-//        this.destination = route.getDestination();
-//        
-//        this.currentStepIndex = 0;
-//        
-//        this.currentWpIndex = 0;
-//        
-//        this.origin = route.getOrigin();
-//        
-//        this.currentPosition =  route.getOrigin();
-//        
-//        this.steps = route.getSteps();
-//    }
-    
     public void setRoute(Route route){
          this.routeName = route.getName();
         

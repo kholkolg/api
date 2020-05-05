@@ -24,33 +24,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestProcessor {
     
-//        private final DistanceProvider dp;
     @Autowired
     private OSMRouteProvider rp ;
 
-//    @Autowired
-//    private List<Car> cars;
-
     @Autowired
-    private ApplicationContext applicationContext;
+    private CarBuilder cb;
+//    private ApplicationContext applicationContext;
     
     private double epsilon = 5;
 
-//    @PostConstruct
-//    public void init() throws Exception {
-//        cars = new ArrayList<Car>();
-//        fooList.add(new FooImpl());
-//    }
-//    
-//    public RequestProcessor(double epsilon){
-////        this.dp = (dp == null) ? new Proj4jDistanceProvider() : dp;
-////        this.rp = (rp == null) ?  new FIlERouteProvider("") : rp;
-////        this.epsilon = epsilon;
-//    }
 
-//    public void setEpsilon(double epsilon) {
-//        this.epsilon = epsilon;
-//    }
+    public void setEpsilon(double epsilon) {
+        this.epsilon = epsilon;
+    }
     
     
     public Response processRequest(BestRouteRequest request){
@@ -64,12 +50,9 @@ public class RequestProcessor {
         //find winner and it's distance to the destination
         double bestDist = Double.MAX_VALUE;
         String bestRoute = "";
-        for(Route r : routes){
-            Car car = applicationContext.getBean(Car.class);
-             cars.add(car);
-//            Car car = cars.get(0);
-            
-            car.setRoute(r);
+        for(Route route : routes){
+            Car car = cb.getCar(route);
+            cars.add(car);
             double dist = car.movefromStart(request.getTime());
             if(dist < bestDist){
                 bestDist = dist;
