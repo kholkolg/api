@@ -5,7 +5,6 @@
  */
 package com.service.api.model.distance;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @author Olga Kholkovskaia
  */
 @Component("haversineDistanceProvider")
-@Lazy(true)
 public class HaversineDistanceProvider implements DistanceProvider{
     final private static int R = 6371000; 
     

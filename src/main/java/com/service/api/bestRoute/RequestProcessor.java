@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 public class RequestProcessor {
     
     @Autowired
-    @Qualifier("osmRouteProvider")
+    @Qualifier("fileRouteProvider")
     private RouteProvider routeProvider ;
 
     @Autowired

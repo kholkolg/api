@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  *
- * @author Olga Kholkovskaia <olga.kholkovskaya@gmail.com>
+ * @author Olga Kholkovskaia 
  */
 
 
@@ -49,7 +49,9 @@ public class CarTest {
     double[] times = new double[]{0, 10, 20, 100, 300, 500, 1200, 2214, 2467, 2346}; 
     double[] resultsA = new double[]{11235, 11225, 11215, 11140, 11625, 10910, 6005, 0.0, 0.0, 0.0};
     double[] resultsB = new double[]{11235, 11225, 11215, 11135, 11160, 9920,  6650, 330, 0.0, 50};
-//    double[] resultsC = new double[]{};
+
+       
+//    double[] times = new double[]{210, 211, 212, 213, 229, 230, 231,250, 251, 252, 253, 518,519, 520};
     
     
     public static Route readRoute(String filename){
@@ -82,11 +84,11 @@ public class CarTest {
         Car car = carBuilder.getCar(route);
         for(int i = 0; i < times.length; i++){
             double time =  times[i];
-            double exp_result = resultsA[i];
+            double exp_result = 10816;
             double result = car.movefromStart(time);
              System.out.println(result + " "+ exp_result);
             if(Math.abs(result - exp_result) > EPS){
-                System.out.println(result + " "+ exp_result);
+                System.out.println(time+": " + result + " "+ exp_result);
                 all_passed = false;
             }
         }
@@ -98,16 +100,16 @@ public class CarTest {
      */
     @Test
     public void testMovefromStartB() {
-        System.out.println("movefromStart: Point B");
+        System.out.println("movefromStart: Point C");
         boolean all_passed = true;
-        Route route = readRoute(files[1]);
+        Route route = readRoute(files[2]);
         Car car = carBuilder.getCar(route);
         for(int i = 0; i < times.length; i++){
-            double time =  times[i];
-            double exp_result = resultsB[i];
+            double time = times[i];
+            double exp_result = 10816;// resultsB[i];
             double result = car.movefromStart(time);
             if(Math.abs(result - exp_result) > EPS){
-                System.out.println(result + " "+ exp_result); 
+                System.out.println(time+": "+result + " "+ exp_result); 
                 all_passed = false;
             }
         }

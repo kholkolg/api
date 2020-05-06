@@ -117,46 +117,45 @@ public class Car {
      * @return 
      */
     public double computeDelay(double targetDistance, double epsilon){
-       
-        double time = 0;
-        boolean stop = false;
-       
-        while(!stop && currentStepIndex < steps.size()){ 
-            Step step = steps.get(currentStepIndex);
-            double[][] waypoints = step.getWaypoints();
-            while(currentWpIndex < waypoints.length){
-                double distFromNextStep = dp.getDistanceMeters(destination, waypoints[currentWpIndex]);
-                if(Math.abs(distFromNextStep - targetDistance) > epsilon){
-                    stop = true;
-                    break;
-                }else{
-                    double stepDistance = dp.getDistanceMeters(currentPosition, waypoints[currentWpIndex]);
-                    time += stepDistance / step.getSpeedMs();
-                    currentPosition = waypoints[currentWpIndex];
-                    currentWpIndex++;
-                }
-            }
-            if(stop){
-                break;
-            }else{
-                currentStepIndex++;
-                currentWpIndex = 0;
-            }
-       }
-        double[][] waypoints = steps.get(currentStepIndex).getWaypoints();
-        double[] point1 = waypoints[currentWpIndex];
-        double[] point2 = new double[2];
-        if(currentWpIndex < waypoints.length-1){
-             point2 = waypoints[currentWpIndex + 1];
-        }else if(currentStepIndex < steps.size()){
-            point2 = steps.get(currentStepIndex+1).getWaypoints()[0];
-        }else{
-            point2 = point1;
+
+        if(dp.getDistanceMeters(currentPosition, destination) <= targetDistance){
+            return 0.0;
         }
-        double dist = dp.getDistanceFromPoint1(point1, point2, destination, targetDistance);
-        time = dist/ steps.get(currentStepIndex).getSpeedMs();      
+        Step step = steps.get(currentStepIndex);
+        double time = 0;
+        double currentDistance = dp.getDistanceMeters(destination, step.getWaypoints()[currentWpIndex+1]);
+        
+        while(currentDistance > targetDistance && currentStepIndex < steps.size()){
+            double[][] wps = step.getWaypoints();
+            while(currentDistance > targetDistance && currentWpIndex < wps.length-2){
+                currentWpIndex++;
+                double length = dp.getDistanceMeters(currentPosition, wps[currentWpIndex]);
+                double duration = length/step.getSpeedMs();
+                time += duration;
+                currentPosition = wps[currentWpIndex];
+                currentDistance = dp.getDistanceMeters(destination, step.getWaypoints()[currentWpIndex+1]);
+            }
+            if(currentDistance > targetDistance){
+                currentWpIndex++;
+                double length = dp.getDistanceMeters(currentPosition, wps[currentWpIndex]);
+                double duration = length/step.getSpeedMs();
+                currentPosition = wps[currentWpIndex];
+                time += duration;
+                currentStepIndex++;
+                step = steps.get(currentStepIndex);
+                currentWpIndex = 0;
+                currentDistance = dp.getDistanceMeters(destination, step.getWaypoints()[currentWpIndex]);
+                
+            }else{
+                break;
+            }
+        }
+        double[][] waypoints = step.getWaypoints();
+        double[] point = waypoints[currentWpIndex+1];
+        double dist = dp.getDistanceFromPoint1(currentPosition, point, destination, targetDistance);
+        time += dist/ step.getSpeedMs();      
         return time;
-    }
+     }
 
     
     private double findWaypoint(Step step, double routeTime, double duration){
@@ -164,7 +163,7 @@ public class Car {
         double speed = step.getSpeedMs();
         double stepDistance = dp.getDistanceMeters(waypoints[currentWpIndex], waypoints[currentWpIndex + 1]);
         double stepDuration = stepDistance / speed;
-        while((routeTime + stepDuration) < duration && currentWpIndex < waypoints.length - 1){
+        while((routeTime + stepDuration) < duration && currentWpIndex < (waypoints.length - 2)){
             routeTime += stepDuration;
             currentWpIndex++;
             stepDistance = dp.getDistanceMeters(waypoints[currentWpIndex], waypoints[currentWpIndex + 1]);
@@ -177,7 +176,7 @@ public class Car {
         double[][] waypoints = step.getWaypoints();
         double timeLeft = duration - routeTime;
         double distFromLastWp = timeLeft * step.getSpeedMs();
-        double[] p1= waypoints[currentWpIndex];
+        double[] p1 = waypoints[currentWpIndex];
         double[] p2 = waypoints[currentWpIndex+1];
         double[] endPoint = dp.getPoint(p1, p2, distFromLastWp);
         return endPoint;

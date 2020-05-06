@@ -12,7 +12,6 @@ import org.osgeo.proj4j.BasicCoordinateTransform;
 import org.osgeo.proj4j.CRSFactory;
 import org.osgeo.proj4j.CoordinateReferenceSystem;
 import org.osgeo.proj4j.ProjCoordinate;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Component;
  * @author Olga Kholkovskaia
  */
 @Component("proj4jDistanceProvider")
-@Lazy(true)
+//@Lazy(true)
 public class Proj4jDistanceProvider implements DistanceProvider{
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private final BasicCoordinateTransform transformToMetric;
@@ -147,8 +146,11 @@ public class Proj4jDistanceProvider implements DistanceProvider{
     }
     
     private double solve(double b, double c){
-        double desc = Math.sqrt(1 - 4*b*c);
-        double sol = (-b + desc)/(2);
+        double desc = 1 - 4*b*c;
+        if(desc < 0){
+            return 0;
+        }
+        double sol = (-b + Math.sqrt(desc))/2;
         return sol;
     }
     

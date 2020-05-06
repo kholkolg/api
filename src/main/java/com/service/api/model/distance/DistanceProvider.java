@@ -5,13 +5,11 @@
  */
 package com.service.api.model.distance;
 
-import org.springframework.stereotype.Service;
-
 /**
  *
  * @author Olga Kholkovskaia 
  */
-//@Service
+
 public interface DistanceProvider {
     
     /**

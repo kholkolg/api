@@ -38,7 +38,6 @@ import org.springframework.stereotype.Component;
  * @author Olga Kholkovskaia 
  */
 @Component("osmRouteProvider")
-@Lazy(true)
 public class OSMRouteProvider implements RouteProvider {
     private final  String url =  "http://router.project-osrm.org/route/v1/driving/";
     

@@ -66,14 +66,14 @@ public class Route {
      * @return 
      */
     public double[] getDestination(){
-        return this.steps.get(this.steps.size()-1).getEndPoint();
+        return steps.get(steps.size()-1).getEndPoint();
     }
     /**
      * First waypoint coordinates.
      * @return 
      */
     public double[] getOrigin(){
-        return this.steps.get(0).getEndPoint();
+        return this.steps.get(0).getStartPoint();
     }
         
     @Override
